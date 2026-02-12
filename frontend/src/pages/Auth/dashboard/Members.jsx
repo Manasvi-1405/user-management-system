@@ -24,7 +24,7 @@ useEffect(() => {
 
 return (
     <>
-      <h3 className="text-lg mb-4 text-white">Members</h3>
+      <h3 className="text-lg mb-4 text-black">Members</h3>
 
       <input
         className="border-gray-700 border px-3 py-1 rounded-md outline-none w-full mb-4"

@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice} from "@reduxjs/toolkit"
 import axios from "axios";
 
-export const getUsers=createAsyncThunk("users/getUsers",async(_,{rejectWithValue})=>{
+export const register=createAsyncThunk("auth/register",async(_,{rejectWithValue})=>{
   
     try {
-        const response=await axios.get(`${import.meta.env.VITE_BASE_URL}/users?limit=1000`)
+        const response=await axios.post(`${import.meta.env.VITE_BASE_URL}/register`)
      return{
             status:response.status,
             data:response.data,
@@ -19,23 +19,26 @@ export const getUsers=createAsyncThunk("users/getUsers",async(_,{rejectWithValue
         
     }
 })
+
 const initialState={
   isLoading:false
 
 }
 
-const users =createSlice({
+const auth =createSlice({
     name:"users",
     initialState:initialState,
     reducers:{},
     extraReducers:(builder)=>{
-        builder.addCase(getUsers.pending,(state)=>{
+        builder.addCase(register.pending,(state)=>{
             state.isLoading=true
-        }).addCase(getUsers.fulfilled,(state)=>{
+        }).addCase(register.fulfilled,(state)=>{
             state.isLoading=false
-        }).addCase(getUsers.rejected,(state)=>{
+        }).addCase(register.rejected,(state)=>{
             state.isLoading=false
         })
-    }
+    
+    
+      }
 })
-export default users.reducer
+export default auth.reducer

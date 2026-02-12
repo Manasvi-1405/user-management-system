@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import Members from "./Members";
-import LeadTimelineChart from "./LeadTimelineChart";
+import LeadTimelineChart from "../../../components/LeadTimelineChart";
 import { employeeData } from "../../../utils/employeeData";
 
 const Design = () => {
-  const [selectedUser, setSelectedUser] = useState(
-    employeeData[0]?.name
-  );
+  const [selectedUser, setSelectedUser] = useState(employeeData[0]?.name);
 
   return (
     <div className="p-4 space-y-6">
@@ -29,57 +27,8 @@ const Design = () => {
 
 export default Design;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // // import React from 'react'
-// // import { 
+// // import {
 // //   Chart as ChartJS,
 // //   CategoryScale,
 // //   LinearScale,
@@ -102,8 +51,6 @@ export default Design;
 // // const Design = ({selectUser, leadData}) => {
 // //   const userData = leadData.filter(
 // //     (item)=>item.user ===selectUser);
-  
-  
 
 // //   const data = {
 // //     labels: userData.map((item) => item.user),
@@ -120,7 +67,6 @@ export default Design;
 // //       },
 // //     ],
 // //   };
-
 
 // //   const options = {
 // //     indexAxis: "y", // horizontal bar
@@ -150,12 +96,8 @@ export default Design;
 // //     },
 // //   };
 
-
-
-
 // //   return (
 // //     <>
-
 
 // //      {/* <div className='text-white'>Graph Representation</div> */}
 // //      <div>
@@ -163,12 +105,8 @@ export default Design;
 // //       <Bar data={data} options={options} />
 // //     </div>
 
-
-  
 // //     </>
 // //   )
 // // }
 
 // // export default Design
-
-

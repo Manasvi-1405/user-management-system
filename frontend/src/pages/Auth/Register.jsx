@@ -1,25 +1,43 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { authApi } from "../../api/authApi";
+import { useDispatch } from "react-redux";
+import { register } from "../../redux-store/auth/auth";
 
 const Register = () => {
-  const navigate = useNavigate();
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  const dispatch=useDispatch()
+
+  // const navigate = useNavigate();
+
+  // Single state object (as requested)
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    role: "user", // default role
+  });
+
   const [error, setError] = useState("");
 
   const passwordRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
-    if (!name || !email || !password || !confirmPassword) {
+    const { name, email, password, role } = formData;
+
+    if (!name || !email || !password) {
       setError("All fields are required");
       return;
     }
@@ -31,32 +49,23 @@ const Register = () => {
       return;
     }
 
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
 
-    setLoading(true);
-
-    const response = await authApi.register({
+    const payload = {
       name,
       email,
       password,
-    });
+      role,
+    };
+    dispatch(register(payload)).unwrap()
+    .then((res)=>{
+      console.log("res")
+      console.log(res)
+    }).catch((error)=>{
+      console.log("error")
+      console.log(error)
+    })
+  
 
-    if (response.success) {
-      const { token, user } = response.data;
-
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
-
-      alert("✅ Registration successful!");
-      navigate("/login");
-    } else {
-      setError(response.message);
-    }
-
-    setLoading(false);
   };
 
   return (
@@ -74,8 +83,9 @@ const Register = () => {
             </label>
             <input
               type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
               className="w-full border border-black px-3 py-2 rounded-md"
             />
           </div>
@@ -86,8 +96,9 @@ const Register = () => {
             </label>
             <input
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
               className="w-full border border-black px-3 py-2 rounded-md"
             />
           </div>
@@ -98,22 +109,26 @@ const Register = () => {
             </label>
             <input
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
               className="w-full border border-black px-3 py-2 rounded-md"
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium mb-1">
-              Confirm Password
+              Role
             </label>
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+            <select
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
               className="w-full border border-black px-3 py-2 rounded-md"
-            />
+            >
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+            </select>
           </div>
 
           {error && (
@@ -122,10 +137,8 @@ const Register = () => {
 
           <button
             type="submit"
-            disabled={loading}
             className="w-full bg-black text-white py-2 rounded-md"
-          >
-            {loading ? "Registering..." : "Register"}
+          >Submit
           </button>
         </form>
 
