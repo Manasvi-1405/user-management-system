@@ -12,10 +12,14 @@ import LeadTimelineChart from "./components/LeadTimelineChart";
 import ForgotPassword from "./pages/Auth/forgotPassword";
 import ResetPassword from "./pages/Auth/resetPassword";
 import Settings from "./pages/Auth/dashboard/settingsPage";
+import { Toaster } from "sonner";
 
 function App() {
   return (
-    <Routes>
+    <div>
+      <Toaster></Toaster>
+         <Routes>
+      
       <Route path="/" element={<UserDashboardLayout />}>
         <Route index element={<Home />} />
         <Route path="all-leads" element={<AllLeads />} />
@@ -38,6 +42,8 @@ function App() {
         element={<ResetPassword></ResetPassword>}
       ></Route>
     </Routes>
+    </div>
+ 
   );
 }
 
