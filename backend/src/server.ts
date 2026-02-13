@@ -194,7 +194,7 @@ const startServer = async () => {
   try {
     await connectDatabase();
     await ensureSystemUser();
-
+//   http://localhost:9000/api/users
     server = httpServer.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
       console.log(`📱 API Base URL: http://localhost:${PORT}${process.env.API_PREFIX || '/api'}`);

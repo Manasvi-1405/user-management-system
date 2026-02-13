@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 // import { authApi } from "../../api/authApi";
 import {useDispatch} from "react-redux"
 import { login } from "../../redux-store/auth/auth";
+import { toast } from "sonner";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -71,12 +72,16 @@ const Login = () => {
       console.log(res)
       if(res.status===200){
           localStorage.setItem("token", res.data.data.token);
-          
+          toast.success(res.data.message)
           navigate("/")
       }
     }).catch((er)=>{
       console.log("er")
       console.log(er)
+      if(er.status===401){
+        toast.error(er.data.data.message)
+      }
+      
     })
     // setLoading(true);
 
