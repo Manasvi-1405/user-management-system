@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { authApi } from "../../api/authApi";
+// import { authApi } from "../../api/authApi";
+import {useDispatch} from "react-redux"
+import { login } from "../../redux-store/auth/auth";
 
 const Login = () => {
   const navigate = useNavigate();
+ const dispatch = useDispatch()
 
   const [formData, setFormData] = useState({
     email: "",
@@ -63,23 +66,33 @@ const Login = () => {
       return;
     }
 
-    setLoading(true);
+    dispatch(login(formData)).unwrap().then((res)=>{
+      console.log("res")
+      console.log(res)
+      if(res.status===200){
+          localStorage.setItem("token", res.data.data.token);
+          
+          navigate("/")
+      }
+    }).catch((er)=>{
+      console.log("er")
+      console.log(er)
+    })
+    // setLoading(true);
 
-    const response = await authApi.login(formData);
+    // const response = await authApi.login(formData);
 
-    if (response.success) {
-      const { user, token } = response.data;
+    // if (response.success) {
+    //   const { user, token } = response.data;
 
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
+    //   localStorage.setItem("token", token);
+    //   localStorage.setItem("user", JSON.stringify(user));
 
-      alert("✅ Login successful!");
-      navigate("/dashboard");
-    } else {
-      setSubmitError(response.message);
-    }
+    // } else {
+    //   setSubmitError(response.message);
+    // }
 
-    setLoading(false);
+    // setLoading(false);
   };
 
   return (
