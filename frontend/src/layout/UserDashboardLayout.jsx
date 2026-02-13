@@ -14,6 +14,7 @@ import React from "react";
 import { Link, Outlet } from "react-router-dom";
 import Members from "../pages/Auth/dashboard/Members";
 import Home from "../pages/Auth/dashboard/Home";
+import ProfileSection from "../pages/Auth/dashboard/ProfileSection";
 
 const UserDashboardLayout = () => {
   return (
@@ -90,11 +91,10 @@ const UserDashboardLayout = () => {
       {/* Main Section */}
       <div className="flex flex-1 bg-gray-100 flex-col">
         {/* Navbar */}
-        <header className="flex h-16 items-center justify-between  px-6 shadow-sm">
-          <span className=" font-bold text-2xl text-gray-600">
-            Your Dashboard
-          </span>
-         
+        
+
+        <header className="flex h-16 items-center justify-end px-6 shadow-sm bg-white">
+          <ProfileSection />
         </header>
 
         <main className="flex-1 overflow-y-auto p-6">
