@@ -1,58 +1,69 @@
-import axios from "axios";
+// import { createAsyncThunk } from "@reduxjs/toolkit";
+// import 
 
-const api = axios.create({
-  baseURL: "http://localhost:8000/api",
-});
+// import axios from "axios";
 
-// Response handler
-const handleResponse = (response) => {
-  return {
-    success: true,
-    data: response.data,
-  };
-};
+// const api = axios.create({
+//   baseURL: "http://localhost:8000/api",
+// });
 
-// Error handler
-const handleError = (error) => {
-  return {
-    success: false,
-    message:
-      error.response?.data?.message || "Something went wrong",
-  };
-};
+// // Response handler
+// const handleResponse = (response) => {
+//   return {
+//     status:response.status,
+//     success: true,
+//     data: response.data,
+//   };
+// };
 
-export const authApi = {
+// // Error handler
+// const handleError = (error) => {
+//   return {
+//     status:error.status,
+//     success: false,
+//     errorResponse:error.response,
+//     message:
+//       error.response?.data?.message || "Something went wrong",
+//   };
+// };
+
+// export const authApi = {
 
 
-  //login signin
-  login: async (credentials) => {
-    try {
-      const response = await api.post("/auth/login", credentials);
-      return handleResponse(response);
-    } catch (error) {
-      return handleError(error);
-    }
-  },
+//   //login signin
+//   login: async (credentials) => {
+//     try {
+//       const response = await api.post("/auth/login", credentials);
+//       return handleResponse(response);
+//     } catch (error) {
+//       return handleError(error);
+//     }
+//   },
 
-  //signup
-  register: async (userData) => {
-    try {
-      const response = await api.post("/auth/register", userData);
-      return handleResponse(response);
-    } catch (error) {
-      return handleError(error);
-    }
-  },
+//   //signup
+//   register: async (userData) => {
+//     try {
+//       const response = await api.post("/auth/register", userData);
+//       return handleResponse(response);
+//     } catch (error) {
+//       return handleError(error);
+//     }
+//   },
 
-  //reset-password
+//   //reset-password
   
-  dangerReset: async (data) => {
-  try {
-    const response = await api.post("/auth/danger-reset", data);
-    return handleResponse(response);
-  } catch (error) {
-    return handleError(error);
-  }
-}
+//   dangerReset: async (data) => {
+//   try {
+//     const response = await api.post("/auth/danger-reset", data);
+//     return handleResponse(response);
+//   } catch (error) {
+//     return handleError(error);
+//   }
+// }
 
-};
+// };
+
+// login
+// const login =createAsyncThunk("auth/login",async(__,{rejectWithValue})=>{
+//   const response=
+// })
