@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { authApi } from "../../api/authApi";
+// import { authApi } from "../../api/authApi";
 import { useDispatch } from "react-redux";
-import { register } from "../../redux-store/auth/auth";
+// import { register } from "../../redux-store/auth/auth";
 
 const Register = () => {
 
@@ -56,14 +56,14 @@ const Register = () => {
       password,
       role,
     };
-    dispatch(register(payload)).unwrap()
-    .then((res)=>{
-      console.log("res")
-      console.log(res)
-    }).catch((error)=>{
-      console.log("error")
-      console.log(error)
-    })
+    // dispatch(register(payload)).unwrap()
+    // .then((res)=>{
+    //   console.log("res")
+    //   console.log(res)
+    // }).catch((error)=>{
+    //   console.log("error")
+    //   console.log(error)
+    // })
   
 
   };

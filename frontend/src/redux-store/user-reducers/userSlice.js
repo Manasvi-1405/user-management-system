@@ -4,7 +4,12 @@ import axios from "axios";
 export const getUsers=createAsyncThunk("users/getUsers",async(_,{rejectWithValue})=>{
   
     try {
-        const response=await axios.get(`${import.meta.env.VITE_BASE_URL}/users?limit=1000`)
+      const token=  localStorage.getItem("token")
+        const response=await axios.get(`${import.meta.env.VITE_BASE_URL}/users`,{
+            headers:{
+                Authorization: `Bearer ${token}`
+            }
+        })
      return{
             status:response.status,
             data:response.data,
@@ -20,7 +25,8 @@ export const getUsers=createAsyncThunk("users/getUsers",async(_,{rejectWithValue
     }
 })
 const initialState={
-  isLoading:false
+  isLoading:false,
+  users:[]
 
 }
 
@@ -31,8 +37,9 @@ const users =createSlice({
     extraReducers:(builder)=>{
         builder.addCase(getUsers.pending,(state)=>{
             state.isLoading=true
-        }).addCase(getUsers.fulfilled,(state)=>{
+        }).addCase(getUsers.fulfilled,(state,action)=>{
             state.isLoading=false
+            state.users=action.payload.data.data
         }).addCase(getUsers.rejected,(state)=>{
             state.isLoading=false
         })

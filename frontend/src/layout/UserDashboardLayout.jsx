@@ -11,11 +11,19 @@ import {
   Target,
 } from "lucide-react";
 import React from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Navigate, Outlet, useNavigate } from "react-router-dom";
 import Members from "../pages/Auth/dashboard/Members";
 import Home from "../pages/Auth/dashboard/Home";
 
+
 const UserDashboardLayout = () => {
+
+  const navigate=useNavigate()
+
+if (!localStorage.getItem("token")) {
+  return <Navigate to="/login" replace />;
+}
+
   return (
     <div className="flex h-screen bg-slate-100">
       {/* Sidebar */}
