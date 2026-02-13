@@ -13,6 +13,7 @@ import ForgotPassword from "./pages/Auth/forgotPassword";
 import ResetPassword from "./pages/Auth/resetPassword";
 import Settings from "./pages/Auth/dashboard/settingsPage";
 import { Toaster } from "sonner";
+import ProfileSection from "./pages/Auth/dashboard/ProfileSection";
 
 function App() {
   return (
@@ -33,14 +34,11 @@ function App() {
 
       <Route path="/register" element={<Register></Register>}></Route>
       <Route path="/login" element={<Login></Login>}></Route>
-      <Route
-        path="/forgotpassword"
-        element={<ForgotPassword></ForgotPassword>}
-      ></Route>
-      <Route
-        path="/reset-password"
-        element={<ResetPassword></ResetPassword>}
-      ></Route>
+      <Route path="/forgotpassword" element={<ForgotPassword></ForgotPassword>}></Route>
+      <Route path="/reset-password" element={<ResetPassword></ResetPassword>}></Route>
+      <Route path="/signout" element={<ProfileSection />} />
+      
+
     </Routes>
     </div>
  
