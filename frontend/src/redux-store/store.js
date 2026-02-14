@@ -5,8 +5,7 @@ import auth from "./auth/auth"
  const store = configureStore({
   reducer: {
     users: users,
-    
-auth:auth,
-  },
+    auth:auth,
+  },  
 })
 export default store

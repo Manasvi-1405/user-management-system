@@ -21,7 +21,7 @@ const mockRecords = [
 ];
 
 const Attendance = () => {
-  const [status, setStatus] = useState("idle");
+  // const [status, setStatus] = useState("idle");
   const [selectedView, setSelectedView] = useState("10");
   const dispatch=useDispatch()
 

@@ -113,7 +113,7 @@ extraReducers: (builder) => {
     .addCase(createUsers.pending, (state) => {
       state.iscreateUserLoading = true;
     })
-    .addCase(createUsers.fulfilled, (state, action) => {
+    .addCase(createUsers.fulfilled, (state) => {
       state.iscreateUserLoading = false;
       // state.users = action.payload.data.data;
     })
