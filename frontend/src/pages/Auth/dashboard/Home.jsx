@@ -170,34 +170,11 @@ const Home = () => {
 
               <div className="mt-4 space-y-3">
                 <div className="grid grid-cols-6 items-center bg-gray-200 p-4 rounded-xl hover:bg-gray-300 transition">
-                  <div>
-                    <p className="font-medium">Bhavesh</p>
-                  </div>
+                  
                 </div>
 
-                <div className="grid grid-cols-6 items-center bg-gray-200 p-4 rounded-xl hover:bg-gray-300 transition">
-                  <div>
-                    <p className="font-medium">Ravikant</p>
-                  </div>
-                </div>
 
-                <div className="grid grid-cols-6 items-center bg-gray-200 p-4 rounded-xl hover:bg-gray-300 transition">
-                  <div>
-                    <p className="font-medium">Bhabesh</p>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-6 items-center bg-gray-200 p-4 rounded-xl hover:bg-gray-300 transition">
-                  <div>
-                    <p className="font-medium">steve</p>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-6 items-center bg-gray-200 p-4 rounded-xl hover:bg-gray-300 transition">
-                  <div>
-                    <p className="font-medium">Harshit</p>
-                  </div>
-                </div>
+               
               </div>
             </div>
           </div>

@@ -8,6 +8,6 @@ const store = configureStore({
     users: users,
     attendance: attendance,
     auth: auth,
-  },
+  
 })
 export default store
