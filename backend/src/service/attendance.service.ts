@@ -3,8 +3,11 @@ import { Attendance, IAttendance } from '../models/attendance.model';
 
 // Configuration - Move these to your .env or a Settings model later
 const COMPANY_LOCATION = {
-  lat: 28.601220960871636, // Replace with your company latitude
-  lng: 77.43365336008797 // Replace with your company longitude
+  // lat: 28.601220960871636, Replace with your company latitude
+  // lng: 77.43365336008797 Replace with your company longitude
+
+     lat: 26.8524588, 
+   lng: 81.0202533
 };
 const ALLOWED_RADIUS_METERS = 200; 
 

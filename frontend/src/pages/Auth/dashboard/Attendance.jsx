@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -8,8 +8,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Clock, LogIn, LogOut, CalendarDays, TrendingUp, Award, Coffee, MapPin, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useDispatch} from "react-redux";
-import { clockIn } from "../../../redux-store/attendance-reducers/attendanceSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { clockIn, clockOut, myAttendanceHistory } from "../../../redux-store/attendance-reducers/attendanceSlice";
+import { toast } from "sonner";
 
 
 const mockRecords = [
@@ -23,54 +24,84 @@ const mockRecords = [
 const Attendance = () => {
   const [status, setStatus] = useState("idle");
   const [selectedView, setSelectedView] = useState("10");
-  const dispatch=useDispatch()
 
-  // const getStatusColor = (status) => {
-  //   switch(status) {
-  //     case 'on-time': return 'bg-green-100 text-green-700 border-green-200';
-  //     case 'late': return 'bg-amber-100 text-amber-700 border-amber-200';
-  //     default: return 'bg-gray-100 text-gray-700 border-gray-200';
-  //   }
-  // };
+  const [isColckedIn, setIsClockedIn] = useState(false)
+  const dispatch = useDispatch()
+
+  const {myAttendanceHistoryy}=useSelector((state)=>state.attendance)
+
+  console.log("myAttendanceHistory")
+  console.log(myAttendanceHistoryy)
 
 
-  async function genrateLocation(){
 
-navigator.geolocation.getCurrentPosition(
-  (position) => {
-    const latitude = position.coords.latitude;
-    const longitude = position.coords.longitude;
+  async function genrateLocation() {
 
-    console.log(latitude, longitude);
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
 
-    const payload = {
-      lat: latitude,
-      lng: longitude
-    };
+        console.log(latitude, longitude);
 
-    dispatch(clockIn(payload))
-      .unwrap()
-      .then((res) => {
-        console.log("res location", res);
-      })
-      .catch((er) => {
-        console.log("er location", er);
-      });
-  },
-  (error) => {
-    console.error("Location error:", error);
+        const payload = {
+          lat: latitude,
+          lng: longitude
+        };
+
+        dispatch(clockIn(payload))
+          .unwrap()
+          .then((res) => {
+            console.log("res location", res);
+            if (res.status === 201) {
+              toast.success(res.data.message)
+              setIsClockedIn(true)
+            }
+          })
+          .catch((er) => {
+            console.log("er location", er);
+          });
+      },
+      (error) => {
+        console.error("Location error:", error);
+      }
+    );
+
+
   }
-);
 
-    
+
+  function handleClockOut() {
+    dispatch(clockOut()).unwrap().then((res) => {
+      console.log("out res")
+      console.log(res)
+      if (res.status === 200) {
+        toast.success(res.data.message)
+        setIsClockedIn(false)
+      }
+    }).catch((er) => {
+      console.log("out err")
+      console.log(er)
+    })
   }
+
+
+  useEffect(()=>{
+    dispatch(myAttendanceHistory()).unwrap().then((res)=>{
+      console.log("history")
+      console.log(res)
+    }).catch((er)=>{
+      console.log("history err")
+      console.log(er)
+    })
+  },[])
 
   return (
     <div className="min-h-screen   space-y-6">
-      
+
       {/* Header Section */}
       <div className="flex items-center justify-between">
-   
+
         <div className="flex items-center gap-3">
           <Badge variant="outline" className="px-4 py-2 bg-white shadow-sm">
             <CalendarDays className="w-4 h-4 mr-2 text-blue-600" />
@@ -92,10 +123,13 @@ navigator.geolocation.getCurrentPosition(
               <div className="flex items-center gap-2 mt-1">
                 <div className={cn(
                   "w-3 h-3 rounded-full animate-pulse",
-                  status === "in" ? "bg-green-500" : status === "out" ? "bg-red-500" : "bg-slate-300"
+                  isColckedIn ? "bg-green-500" : "bg-red-500"
+                  // isColckedIn === true ? "bg-green-500" : status === false ? "bg-red-500" : "bg-slate-300"
                 )} />
                 <span className="text-xl font-semibold text-slate-800">
-                  {status === "in" ? "Active" : status === "out" ? "Completed" : "Not Started"}
+
+
+                  {isColckedIn ? "Active" : "Not Active"}
                 </span>
               </div>
             </div>
@@ -106,11 +140,11 @@ navigator.geolocation.getCurrentPosition(
               size="lg"
               className={cn(
                 "rounded-xl px-6 transition-all duration-200 shadow-md hover:shadow-lg",
-                status === "in" 
-                  ? "bg-slate-200 text-slate-400 hover:bg-slate-200 cursor-not-allowed" 
+                isColckedIn === true
+                  ? "bg-slate-200 text-slate-400 hover:bg-slate-200 cursor-not-allowed"
                   : "bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white"
               )}
-              // disabled={status === "in"}
+              disabled={isColckedIn}
               onClick={genrateLocation}
             >
               <LogIn className="mr-2 w-5 h-5" /> Clock In
@@ -119,12 +153,12 @@ navigator.geolocation.getCurrentPosition(
               size="lg"
               className={cn(
                 "rounded-xl px-6 transition-all duration-200 shadow-md hover:shadow-lg",
-                status !== "in"
+                isColckedIn == false
                   ? "bg-slate-200 text-slate-400 hover:bg-slate-200 cursor-not-allowed"
                   : "bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white"
               )}
-              disabled={status !== "in"}
-              // onClick={() => setStatus("out")}
+              disabled={isColckedIn === false}
+              onClick={handleClockOut}
             >
               <LogOut className="mr-2 w-5 h-5" /> Clock Out
             </Button>
@@ -229,37 +263,38 @@ navigator.geolocation.getCurrentPosition(
                 <TableRow className="hover:bg-slate-50">
                   <TableHead className="font-semibold text-slate-600">Date</TableHead>
                   <TableHead className="font-semibold text-slate-600">Clock In</TableHead>
-                  <TableHead className="font-semibold text-slate-600">Clock Out</TableHead>
+                  {/* <TableHead className="font-semibold text-slate-600">Clock Out</TableHead> */}
                   <TableHead className="font-semibold text-slate-600">Hours Worked</TableHead>
                   <TableHead className="font-semibold text-slate-600">Location</TableHead>
                   <TableHead className="font-semibold text-slate-600">Status</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {mockRecords.slice(0, parseInt(selectedView)).map((record, index) => (
+                {myAttendanceHistoryy.map((record, index) => (
                   <TableRow key={index} className="hover:bg-slate-50 transition-colors">
                     <TableCell className="font-medium text-slate-700">{record.date}</TableCell>
                     <TableCell>
                       <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                        {record.in}
+                        {new Date(record.checkIn).toLocaleString("en-IN")}
                       </Badge>
                     </TableCell>
-                    <TableCell>
+                    {/* <TableCell>
                       <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200">
-                        {record.out}
+                        2
                       </Badge>
-                    </TableCell>
-                    <TableCell className="font-medium text-slate-700">{record.hours}</TableCell>
+                    </TableCell> */}
+                    <TableCell className="font-medium text-slate-700">{record.workHours}</TableCell>
                     <TableCell>
                       <div className="flex items-center gap-1">
                         <MapPin className="w-3 h-3 text-slate-400" />
-                        <span className="text-slate-600">{record.location}</span>
+                        <span className="text-slate-600"></span>
                       </div>
                     </TableCell>
-                    <TableCell>
-                      {/* <Badge className={cn("px-3 py-1 rounded-full", }>
-                        {record.status === 'on-time' ? '✓ On Time' : '⚠️ Late'}
-                      </Badge> */}
+                   <TableCell>
+                      <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                        {record.status
+}
+                      </Badge>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -268,7 +303,7 @@ navigator.geolocation.getCurrentPosition(
           </div>
 
           {/* Quick Insights */}
-          <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="bg-blue-50 rounded-xl p-4">
               <p className="text-sm text-blue-600 font-medium">Early Arrivals</p>
               <p className="text-2xl font-bold text-blue-700 mt-1">12</p>
@@ -284,7 +319,7 @@ navigator.geolocation.getCurrentPosition(
               <p className="text-2xl font-bold text-green-700 mt-1">8</p>
               <p className="text-xs text-green-500 mt-1">This month</p>
             </div>
-          </div>
+          </div> */}
         </CardContent>
       </Card>
     </div>
