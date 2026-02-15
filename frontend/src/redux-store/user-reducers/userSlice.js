@@ -105,6 +105,8 @@ extraReducers: (builder) => {
     .addCase(getUsers.fulfilled, (state, action) => {
       state.isLoading = false;
       state.users = action.payload.data.data;
+      // state.users = action.payload.data.users;
+
     })
     .addCase(getUsers.rejected, (state) => {
       state.isLoading = false;

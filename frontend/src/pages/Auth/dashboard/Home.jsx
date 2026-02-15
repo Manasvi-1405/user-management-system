@@ -26,18 +26,20 @@ const Home = () => {
       });
   }, []);
 
+  
+
   return (
     <div className="flex flex-col bg-gray-100 gap-6">
+
+     
+      
+      
       <div className="border flex justify-between items-center border-gray-300 rounded-xl shadow-md px-4 py-6 hover:shadow-xl">
         <div>
           <h1 className="font-bold text-2xl ">Welcome back, Manasvi !</h1>
-           <div className="flex gap-2 ">
-            <input
-              className="border-gray-700 border px-3 py-1 rounded-md outline-none placeholder-gray-400 flex justify-between items-center"
-              placeholder="search"
-            ></input>
-            <button className="bg-blue-500 hover:bg-blue-700 text-white px-6 py-2 rounded-xl shadow-md transition-all duration-200 active:scale-95">Search</button>
-          </div>
+          
+
+
         
           <p className="text-sm text-gray-500">
             Manage your lead pipeline and team performance
@@ -53,6 +55,7 @@ const Home = () => {
           <p className="text-xs text-gray-800">2/11/2026, 11:47:07 PM</p>
         </div>
       </div>
+      
       {/* second div */}
       <div>
         <div className="border flex justify-between items-center border-gray-300 rounded-xl shadow-lg px-4 py-6">

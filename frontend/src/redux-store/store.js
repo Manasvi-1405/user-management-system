@@ -9,5 +9,6 @@ const store = configureStore({
     attendance: attendance,
     auth: auth,
   
-})
+}})
+
 export default store

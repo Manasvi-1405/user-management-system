@@ -13,13 +13,13 @@ import { clockIn, clockOut, myAttendanceHistory } from "../../../redux-store/att
 import { toast } from "sonner";
 
 
-const mockRecords = [
-  { date: "14 Feb 2026", in: "09:05 AM", out: "06:10 PM", hours: "9h 05m", location: "Office", status: "on-time" },
-  { date: "13 Feb 2026", in: "09:00 AM", out: "05:58 PM", hours: "8h 58m", location: "Remote", status: "on-time" },
-  { date: "12 Feb 2026", in: "09:12 AM", out: "06:02 PM", hours: "8h 50m", location: "Office", status: "late" },
-  { date: "11 Feb 2026", in: "08:55 AM", out: "05:45 PM", hours: "8h 50m", location: "Office", status: "on-time" },
-  { date: "10 Feb 2026", in: "09:30 AM", out: "06:30 PM", hours: "9h 00m", location: "Remote", status: "late" },
-];
+// const mockRecords = [
+//   { date: "14 Feb 2026", in: "09:05 AM", out: "06:10 PM", hours: "9h 05m", location: "Office", status: "on-time" },
+//   { date: "13 Feb 2026", in: "09:00 AM", out: "05:58 PM", hours: "8h 58m", location: "Remote", status: "on-time" },
+//   { date: "12 Feb 2026", in: "09:12 AM", out: "06:02 PM", hours: "8h 50m", location: "Office", status: "late" },
+//   { date: "11 Feb 2026", in: "08:55 AM", out: "05:45 PM", hours: "8h 50m", location: "Office", status: "on-time" },
+//   { date: "10 Feb 2026", in: "09:30 AM", out: "06:30 PM", hours: "9h 00m", location: "Remote", status: "late" },
+// ];
 
 const Attendance = () => {
   // const [status, setStatus] = useState("idle");

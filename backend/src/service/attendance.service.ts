@@ -6,8 +6,8 @@ const COMPANY_LOCATION = {
   // lat: 28.601220960871636, Replace with your company latitude
   // lng: 77.43365336008797 Replace with your company longitude
 
-     lat: 26.8524588, 
-   lng: 81.0202533
+     lat: 28.632432587193108, 
+   lng:77.49282800859184
 };
 const ALLOWED_RADIUS_METERS = 200; 
 
