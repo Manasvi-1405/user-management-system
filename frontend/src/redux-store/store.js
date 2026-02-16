@@ -9,7 +9,7 @@ const store = configureStore({
     users: users,
     attendance: attendance,
     auth: auth,
- leads: leads
+   leads: leads
 
 }})
 
