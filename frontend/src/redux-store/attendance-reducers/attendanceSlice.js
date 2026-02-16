@@ -79,6 +79,41 @@ export const myAttendanceHistory = createAsyncThunk("attendance/myAttendanceHist
     }
 })
 
+//get work hour
+
+
+
+export const getWorkHours = createAsyncThunk("attendance/myAttendanceHistory", async (_, { rejectWithValue }) => {
+
+    try {
+        const token = localStorage.getItem("token")
+        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/attendance/getWorkHours`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+        return {
+            status: response.status,
+            data: response.data,
+        }
+
+    } catch (error) {
+        return rejectWithValue({
+            // status:error.status,
+            // data:error.response
+            err: error
+        })
+
+    }
+})
+
+
+
+
+
+
+
+
 
 const initialState = {
     isLoading: false,

@@ -10,7 +10,8 @@ import { Search } from "lucide-react";
 // import LeadsBySourceChart from "../../../components/LeadsBySourceChart";
 import LeadsByFolderChart from "../../../components/LeadsByFolderChart";
 import { toast } from "sonner";
-// import { getLeads } from "../../../redux-store/leads/leadsSlice";
+import { leadStats } from "../../../redux-store/leads/leadsSlice";
+
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -18,12 +19,10 @@ const Home = () => {
 
   const { users } = useSelector((state) => state.users)
 
-  console.log("users")
-  console.log(users)
+  const {overAllLeads}=useSelector((state)=>state.leads)
 
-
-
-  useEffect(() => {
+  
+useEffect(() => {
     dispatch(getUsers())
       .unwrap()
       .then((res) => {
@@ -38,24 +37,19 @@ const Home = () => {
 
   //leads
 
-  // useEffect(() => {
-  //   dispatch(getLeads()).unwrap().then((res) => {
-  //     console.log("res", res);
-  //     if (res.status === 200) {
-  //       toast.success(res.message
-  //       )
-  //     }
-  //   })
-  //     .catch((err) => {
-  //       console.log("err", err);
-  //     });
-  // }, [dispatch]);
 
+  useEffect(() => {
+    dispatch(leadStats()).unwrap().then((res) => {
+        console.log("overAllLeads");
+        console.log(overAllLeads);
+      })
+      .catch((er) => {
+        console.log("er");
+        console.log(er);
+      });
+  }, [dispatch]);
 
-
-  // const { leads } = useSelector((state) => state.leads)
-  // console.log("leads")
-  // console.log(leads)
+  
 
   return (
     <div className="flex flex-col bg-gray-100 gap-6">

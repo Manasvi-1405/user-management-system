@@ -81,6 +81,34 @@ export const getMyLeadsStats = createAsyncThunk(
   }
 );
 
+export const leadStats = createAsyncThunk(
+  "/leads/leadStats",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/leads/my-leads/stats`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // ✅ space important
+          },
+        }
+      );
+
+      return {
+        status:response.status,
+        data:response.data
+      }
+    } catch (error) {
+      return rejectWithValue({
+        status:error.status,
+        error:error.response.data
+      });
+    }
+  }
+);
+
 
 
 //create new lead
@@ -181,7 +209,8 @@ const initialState={
   isLoading:false,
   iscreateUserLoading:false,
   myLeads:{},
-  adminStates:[]
+  adminStates:[],
+  overAllLeads:{}
 
 }
 
@@ -199,6 +228,17 @@ extraReducers: (builder) => {
       state.myLeads = action.payload.data.data;
     })
     .addCase(getMyLeadsStats.rejected, (state) => {
+      state.isLoading = false;
+    })
+
+    .addCase(leadStats.pending, (state) => {
+      state.isLoading = true;
+    })
+    .addCase(leadStats.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.myLeads = action.payload.data.data;
+    })
+    .addCase(leadStats.rejected, (state) => {
       state.isLoading = false;
     })
 
