@@ -6,11 +6,40 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { useEffect } from "react";
 import { Bar } from "react-chartjs-2";
+import { getLeads } from "../redux-store/leads/leadsSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "sonner";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
 const LeadsBySourceChart = () => {
+
+const leads = useSelector((state) => state.leads?.leads) || [];
+ const dispatch = useDispatch();
+
+
+
+
+useEffect(() => {
+    dispatch(getLeads()).unwrap().then((res) => {
+      console.log("res", res);
+      if (res.status === 200) {
+        toast.success(
+        )
+      }
+    })
+      .catch((err) => {
+        console.log("err", err);
+      });
+  }, [dispatch]);
+
+
+
+
+
+
   const data = {
     labels: [
       "Import",

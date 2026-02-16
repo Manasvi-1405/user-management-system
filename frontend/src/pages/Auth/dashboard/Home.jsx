@@ -30,6 +30,8 @@ const Home = () => {
       });
   }, [dispatch]);
 
+  //leads
+
     useEffect(() => {
     dispatch(getLeads()).unwrap().then((res) => {
       console.log("res", res);

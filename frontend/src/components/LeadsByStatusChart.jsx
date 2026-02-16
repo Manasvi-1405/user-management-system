@@ -32,7 +32,7 @@ useEffect(() => {
     dispatch(getLeads()).unwrap().then((res) => {
       console.log("res", res);
       if (res.status === 200) {
-        toast.success(
+        toast.success(res.message
         )
       }
     })
