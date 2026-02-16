@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice} from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice, current} from "@reduxjs/toolkit"
 import axios from "axios";
 
 
@@ -45,7 +45,8 @@ export const login=createAsyncThunk("auth/login",async(payload,{rejectWithValue}
 })
 
 const initialState={
-  isLoading:false
+  isLoading:false,
+//   currentLoggedInUser:{}
 
 }
 

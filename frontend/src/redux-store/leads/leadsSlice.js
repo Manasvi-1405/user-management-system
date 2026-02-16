@@ -24,14 +24,15 @@ import axios from "axios";
 //   }
 
 // })
-export const getLeads = createAsyncThunk(
-  "leads/getLeads",
+
+export const getAdminStates = createAsyncThunk(
+  "leads/getAdminStates",
   async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
 
       const response = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/leads`,
+        `${import.meta.env.VITE_BASE_URL}/leads/admin-stats`,
         {
           headers: {
             Authorization: `Bearer ${token}`, // ✅ space important
@@ -39,9 +40,43 @@ export const getLeads = createAsyncThunk(
         }
       );
 
-      return response.data; // simple return
+      return {
+        status:response.status,
+        data:response.data
+      }
     } catch (error) {
-      return rejectWithValue(error.response?.data);
+       return rejectWithValue({
+        status:error.status,
+        error:error.response.data
+      });
+    }
+  }
+);
+
+export const getMyLeadsStats = createAsyncThunk(
+  "leads/getLeads",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/leads/my-leads`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // ✅ space important
+          },
+        }
+      );
+
+      return {
+        status:response.status,
+        data:response.data
+      }
+    } catch (error) {
+      return rejectWithValue({
+        status:error.status,
+        error:error.response.data
+      });
     }
   }
 );
@@ -145,7 +180,8 @@ export const deleteLead=createAsyncThunk("leads/deleteLead",async(_,{rejectWithV
 const initialState={
   isLoading:false,
   iscreateUserLoading:false,
-  leads:[]
+  myLeads:{},
+  adminStates:[]
 
 }
 
@@ -155,14 +191,26 @@ const leads =createSlice({
     reducers:{},
 extraReducers: (builder) => {
   builder
-    .addCase(getLeads.pending, (state) => {
+    .addCase(getMyLeadsStats.pending, (state) => {
       state.isLoading = true;
     })
-    .addCase(getLeads.fulfilled, (state, action) => {
+    .addCase(getMyLeadsStats.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.users = action.payload.data;
+      state.myLeads = action.payload.data.data;
     })
-    .addCase(getLeads.rejected, (state) => {
+    .addCase(getMyLeadsStats.rejected, (state) => {
+      state.isLoading = false;
+    })
+
+
+     .addCase(getAdminStates.pending, (state) => {
+      state.isLoading = true;
+    })
+    .addCase(getAdminStates.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.adminStates = action.payload.data.data;
+    })
+    .addCase(getAdminStates.rejected, (state) => {
       state.isLoading = false;
     })
 

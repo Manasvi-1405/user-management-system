@@ -21,14 +21,14 @@ import ProfileSection from "../pages/Auth/dashboard/ProfileSection";
 
 const UserDashboardLayout = () => {
 
-  const navigate=useNavigate()
+  const navigate = useNavigate()
 
 
- 
 
-if (!localStorage.getItem("token")) {
-  return <Navigate to="/login" replace />;
-}
+
+  if (!localStorage.getItem("token")) {
+    return <Navigate to="/login" replace />;
+  }
 
   return (
     <div className="flex h-screen bg-slate-100">
@@ -104,7 +104,7 @@ if (!localStorage.getItem("token")) {
       {/* Main Section */}
       <div className="flex flex-1 bg-gray-100 flex-col">
         {/* Navbar */}
-        
+
 
         <header className="flex h-16 items-center justify-end px-6 shadow-sm bg-white">
           <ProfileSection />
@@ -112,14 +112,14 @@ if (!localStorage.getItem("token")) {
 
         <main className="flex-1 overflow-y-auto p-6">
           <Outlet />
-          
-        </main>
-       <div>
-        <main className="flex-1 overflow-y-auto p-6">
-    1
-</main>
 
-       </div>
+        </main>
+        <div>
+          <main className="flex-1 overflow-y-auto p-6">
+
+          </main>
+
+        </div>
       </div>
     </div>
   );
