@@ -4,26 +4,48 @@ import axios from "axios";
 
 
 //lead assign
-export const getLeads=createAsyncThunk("leads/getLeads",async(_,{rejectWithValue})=>{
+// export const getLeads=createAsyncThunk("leads/getLeads",async(_,{rejectWithValue})=>{
 
-  try{
-    const token=localStorage.getItem("token")
-    const response=await axios.get(`${import.meta.env.VITE_BASE_URL}/leads`,{
-      header:{
-        Authorization:`Bearer${token}`
-      }
-    })
-    return{status:response.status,
-      data:response.data
+//   try{
+//     const token=localStorage.getItem("token")
+//     const response=await axios.get(`${import.meta.env.VITE_BASE_URL}/leads`,{
+//       header:{
+//         Authorization:`Bearer${token}`
+//       }
+//     })
+//     return{status:response.status,
+//       data:response.data
+//   }
+
+//   }catch(error){
+//     return rejectWithValue({
+//       err:error
+//     })
+//   }
+
+// })
+export const getLeads = createAsyncThunk(
+  "leads/getLeads",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/leads`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // ✅ space important
+          },
+        }
+      );
+
+      return response.data; // simple return
+    } catch (error) {
+      return rejectWithValue(error.response?.data);
+    }
   }
+);
 
-  }catch(error){
-    return rejectWithValue({
-      err:error
-    })
-  }
-
-})
 
 
 //create new lead
@@ -123,7 +145,7 @@ export const deleteLead=createAsyncThunk("leads/deleteLead",async(_,{rejectWithV
 const initialState={
   isLoading:false,
   iscreateUserLoading:false,
-  users:[]
+  leads:[]
 
 }
 
@@ -138,7 +160,7 @@ extraReducers: (builder) => {
     })
     .addCase(getLeads.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.users = action.payload.data.data;
+      state.users = action.payload.data;
     })
     .addCase(getLeads.rejected, (state) => {
       state.isLoading = false;

@@ -15,32 +15,16 @@ import { Link, Navigate, Outlet, useNavigate } from "react-router-dom";
 import Members from "../pages/Auth/dashboard/Members";
 import Home from "../pages/Auth/dashboard/Home";
 import ProfileSection from "../pages/Auth/dashboard/ProfileSection";
-import { getUsers } from "../redux-store/user-reducers/userSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { toast } from "sonner";
+
+
 
 
 const UserDashboardLayout = () => {
-const dispatch=useDispatch()
- 
-const {users}=useSelector((state)=>state.users)
-console.log("users")
-console.log(users)
+
   const navigate=useNavigate()
 
 
-   useEffect(() => {
-    dispatch(getUsers()).unwrap().then((res) => {
-      console.log("res", res);
-      if (res.status === 200) {
-        toast.success(res.data.message
-        )
-      }
-    })
-      .catch((err) => {
-        console.log("err", err);
-      });
-  }, [dispatch]);
+ 
 
 if (!localStorage.getItem("token")) {
   return <Navigate to="/login" replace />;

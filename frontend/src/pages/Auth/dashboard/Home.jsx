@@ -3,15 +3,19 @@ import Members from "./Members";
 import Design from "./Design";
 import LeadTimelineChart from "../../../components/LeadTimelineChart";
 import { ChartNoAxesColumn, UserRoundSearch ,Target,DollarSign,ChartLine} from "lucide-react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getUsers } from "../../../redux-store/user-reducers/userSlice";
 import {  Search  } from "lucide-react";
 import LeadsByStatusChart from "../../../components/LeadsByStatusChart";
 import LeadsBySourceChart from "../../../components/LeadsBySourceChart";
 import LeadsByFolderChart from "../../../components/LeadsByFolderChart";
+import { toast } from "sonner";
+import { getLeads } from "../../../redux-store/leads/leadsSlice";
 
 const Home = () => {
   const dispatch = useDispatch();
+ 
+
 
   useEffect(() => {
     dispatch(getUsers())
@@ -24,9 +28,26 @@ const Home = () => {
         console.log("er");
         console.log(er);
       });
-  }, []);
+  }, [dispatch]);
 
-  
+    useEffect(() => {
+    dispatch(getLeads()).unwrap().then((res) => {
+      console.log("res", res);
+      if (res.status === 200) {
+        toast.success(res.message
+        )
+      }
+    })
+      .catch((err) => {
+        console.log("err", err);
+      });
+  }, [dispatch]);
+
+
+   
+const {leads}=useSelector((state)=>state.leads)
+console.log("leads")
+console.log(leads)
 
   return (
     <div className="flex flex-col bg-gray-100 gap-6">

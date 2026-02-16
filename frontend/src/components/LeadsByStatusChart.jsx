@@ -6,11 +6,48 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { useEffect } from "react";
 import { Bar } from "react-chartjs-2";
+import { useDispatch, useSelector } from "react-redux";
+import { getLeads } from "../redux-store/leads/leadsSlice";
+import { toast } from "sonner";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
+
+
+
+
+
+
+
+
+
 const LeadsByStatusChart = () => {
+
+   const dispatch = useDispatch();
+const leads = useSelector((state) => state.leads?.leads) || [];
+
+useEffect(() => {
+    dispatch(getLeads()).unwrap().then((res) => {
+      console.log("res", res);
+      if (res.status === 200) {
+        toast.success(
+        )
+      }
+    })
+      .catch((err) => {
+        console.log("err", err);
+      });
+  }, [dispatch]);
+
+
+  const statusCounts = leads.reduce((acc, lead) => {
+    acc[lead.status] = (acc[lead.status] || 0) + 1;
+    return acc;
+  }, {});
+
+
   const data = {
     labels: [
       "DNP",
