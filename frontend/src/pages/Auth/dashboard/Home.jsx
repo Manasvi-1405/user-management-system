@@ -1,28 +1,51 @@
 import React, { useEffect } from "react";
 import Members from "./Members";
 import Design from "./Design";
-import LeadTimelineChart from "../../../components/LeadTimelineChart";
-import { ChartNoAxesColumn, UserRoundSearch, Target, DollarSign, ChartLine } from "lucide-react";
+import { Plus ,CircleX } from "lucide-react";
+import {
+  ChartNoAxesColumn,
+  UserRoundSearch,
+  Target,
+  DollarSign,
+  ChartLine,
+} from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUsers } from "../../../redux-store/user-reducers/userSlice";
 import { Search } from "lucide-react";
-// import LeadsByStatusChart from "../../../components/LeadsByStatusChart";
-// import LeadsBySourceChart from "../../../components/LeadsBySourceChart";
-import LeadsByFolderChart from "../../../components/LeadsByFolderChart";
-import { toast } from "sonner";
-import { leadStats } from "../../../redux-store/leads/leadsSlice";
 
+import { getMyLeadsStats } from "../../../redux-store/leads/leadsSlice";
+import { getUserAnalytics } from "../../../redux-store/performance/performanceSlice";
+
+// import { getLeads } from "../../../redux-store/leads/leadsSlice";
 
 const Home = () => {
   const dispatch = useDispatch();
 
+  const { overAllLeads } = useSelector((state) => state.leads);
+  console.log("overAllLeads");
+  console.log(overAllLeads);
+  const { users } = useSelector((state) => state.users);
 
-  const { users } = useSelector((state) => state.users)
+  console.log("users");
+  console.log(users);
 
-  const {overAllLeads}=useSelector((state)=>state.leads)
+  const { userAnalytic } = useSelector((state) => state.performance);
+  console.log(" userAnalytic", userAnalytic);
 
-  
-useEffect(() => {
+
+
+  useEffect(() => {
+    dispatch(getUserAnalytics())
+      .unwrap()
+      .then((res) => {
+        console.log("getUserAnalytics", res);
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+  }, [dispatch]);
+
+  useEffect(() => {
     dispatch(getUsers())
       .unwrap()
       .then((res) => {
@@ -35,226 +58,152 @@ useEffect(() => {
       });
   }, [dispatch]);
 
-  //leads
-
-
   useEffect(() => {
-    dispatch(leadStats()).unwrap().then((res) => {
-        console.log("overAllLeads");
-        console.log(overAllLeads);
-      })
-      .catch((er) => {
-        console.log("er");
-        console.log(er);
-      });
+    const fetchData = async () => {
+      try {
+        const res = await dispatch(getMyLeadsStats()).unwrap();
+        console.log("SUCCESS:", res);
+      } catch (err) {
+        console.log("FAILED:", err); // 👈 ab ye print hoga
+      }
+    };
+
+    fetchData();
   }, [dispatch]);
 
-  
-
   return (
-    <div className="flex flex-col bg-gray-100 gap-6">
+    <div className="flex flex-col bg-gradient-to-br from-indigo-50 via-blue-50 to-purple-50 gap-6 p-6">
 
-
-
-
-      <div className="border flex bg-white justify-between items-center border-gray-300 rounded-xl shadow-md px-4 py-6 hover:shadow-xl">
-        <div className="">
-          <h1 className="font-bold text-2xl ">Welcome back, Manasvi !</h1>
-
-
-
-
-          <p className="text-sm text-gray-500">
-            Manage your lead pipeline and team performance
-          </p>
-        </div>
-        <div>
-
-
-          <p className="flex items-center">
-            Last updated{" "}
-            <p className="h-2 w-2 ml-2 bg-green-500 rounded-full"></p>
-          </p>
-          <p className="text-xs text-gray-800">2/11/2026, 11:47:07 PM</p>
-        </div>
-      </div>
-
-      {/* second div */}
-      <div>
-        <div className=" flex justify-between items-center rounded-xl  ">
-          <div className="flex flex-col gap-2 w-64 bg-white border-gray-300 p-4 rounded-xl  hover: shadow-md transition duration-300 ">
-            <p className="text-xl font-semibold">
-              Total Leads <br /> 3,612
-            </p>
-            <p className="flex items-center text-sm text-green-600">
-
-              <ChartNoAxesColumn size={25} />+1993.8% vs last month
-            </p>
-            <p></p>
-
-            {/* <div className="inline-flex items-center justify-center bg-blue-600 p-3 rounded-full shadow-md">
-              <UserRoundSearch className="w-5 h-5 text-white" />
-            </div> */}
-          </div>
-
-          <div className="flex flex-col gap-2 w-64 bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition duration-300 ">
-            <p className="text-xl font-semibold">
-              Conversion Rate <br /> 0.8%
-            </p>
-            <p className="flex items-center text-sm text-green-600">
-              <Target size={25} />
-              29 won / 3616 total
-            </p>
-            <p></p>
-
-            {/* <div className="inline-flex items-center justify-center bg-blue-600 p-3 rounded-full shadow-md">
-              <UserRoundSearch className="w-5 h-5 text-white" />
-            </div> */}
-          </div>
-
-          <div className="flex flex-col gap-2 w-64 bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition duration-300 ">
-            <p className="text-xl font-semibold">
-              Qualified Leads <br /> 3
-            </p>
-            <p className="flex items-center text-sm text-green-600">
-              <DollarSign size={25} />
-              0.1% of total
-            </p>
-            <p></p>
-
-            {/* <div className="inline-flex items-center justify-center bg-blue-600 p-3 rounded-full shadow-md">
-              <UserRoundSearch className="w-5 h-5 text-white" />
-            </div> */}
-          </div>
-
-          <div className="flex flex-col gap-2 w-64 bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition duration-300 ">
-            <p className="text-xl font-semibold">
-              New Leads <br /> 514
-            </p>
-            <p className="flex items-center text-sm text-green-600">
-              <ChartLine size={25} />
-              Require attention
-            </p>
-            <p></p>
-
-            {/* <div className="inline-flex items-center justify-center bg-blue-600 p-3 rounded-full shadow-md">
-              <UserRoundSearch className="w-5 h-5 text-white" />
-            </div> */}
-          </div>
-        </div>
-
-        {/* //graphs */}
-{/* 
-        <div className="flex gap-6 py-5 w-full  h-[80vh]">
-          <div className="flex-1 h-full">
-            <LeadsByStatusChart />
-          </div>
-
-          <div className="flex-1 h-full">
-            <LeadsBySourceChart />
-          </div>
-
-        </div> */}
-
-
-        {/* 
-        <div>
-          <LeadsByFolderChart></LeadsByFolderChart>
-        </div> */}
-
-        {/* third div team performance */}
-
-        <div className="border  border-gray-300 rounded-xl shadow-md bg-white px-4 py-6 hover:shadow-xl mt-5 ">
-          {/* Header */}
-          <h2 className="text-xl font-semibold text-gray-900">
-            All Team Members
-          </h2>
-          <p className="text-black text-sm mb-6">Team Members Details</p>
-
-          {/* Members List */}
-          <div className="space-y-4">
-            <div className="flex items-center border px-4 py-2 rounded-lg mb-6">
-              <Search className="w-4 h-4  mr-2" />
-              <input
-                type="text"
-                placeholder="Search members"
-                className="bg-transparent outline-none text-sm w-full  placeholder-gray-500"
-              />
-            </div>
-
-            {/* 
-   table header */}
-            <div>
-              <div className="grid grid-cols-6 text-sm text-black border-b border-gray-700 pb-3">
-                <p className="text-gray-700 text-[1rem]">Member</p>
-                <p className="text-gray-700 text-[1rem]">Status</p>
-                <p className="text-gray-700 text-[1rem]">Enrolled</p>
-                <p className="text-gray-700 text-[1rem]">Progress</p>
-                <p className="text-gray-700 text-[1rem]">Assign</p>
-                <p className="text-gray-700 text-[1rem]">Completed</p>
-              </div>
-
-              <div className="mt-4 space-y-3">
-                <div className="mt-4 space-y-3">
-                  {users && users.map((user) => (
-                    <div
-                      key={user._id}
-                      className="grid grid-cols-6 items-center bg-gray-200 p-4 rounded-xl hover:bg-gray-300 transition"
-                    >
-                      {/* Member */}
-                      <div>
-                        <p className="font-semibold text-gray-800">{user.name}</p>
-                        <p className="text-xs text-gray-500">{user.email}</p>
-                      </div>
-
-                      {/* Status */}
-                      <div>
-                        <span
-                          className={`px-2 py-1 text-xs rounded-full ${user.isActive
-                              ? "bg-green-100 text-green-700"
-                              : "bg-red-100 text-red-700"
-                            }`}
-                        >
-                          {user.isActive ? "Active" : "Inactive"}
-                        </span>
-                      </div>
-
-                      {/* Enrolled (Created At) */}
-                      <div className="text-sm text-gray-700">
-                        {new Date(user.createdAt).toLocaleDateString()}
-                      </div>
-
-                      {/* Progress (Role Based Example) */}
-                      <div className="text-sm text-gray-700">
-                        {user.role === "admin" ? "Admin Access" : "Standard User"}
-                      </div>
-
-                      {/* Assign (Example: Work Mode) */}
-                      <div className="text-sm text-gray-700">
-                        {user.canWorkFromHome ? "WFH" : "Office"}
-                      </div>
-
-                      {/* Completed (Last Login) */}
-                      <div className="text-sm text-gray-700">
-                        {user.lastLogin
-                          ? new Date(user.lastLogin).toLocaleDateString()
-                          : "—"}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-
-
-
-              </div>
-
-
-            </div>
-          </div>
-        </div>
-      </div>
+  {/* Welcome Card */}
+  <div className="flex justify-between items-center bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-2xl shadow-lg px-6 py-8">
+    <div>
+      <h1 className="font-bold text-3xl">
+        Welcome back, {userAnalytic.userDetails?.name} 👋
+      </h1>
+      <p className="text-sm opacity-90">
+        Manage your lead pipeline and team performance
+      </p>
     </div>
+
+    <div className="text-right">
+      <p className="flex items-center justify-end text-sm">
+        Last updated
+        <span className="h-2 w-2 ml-2 bg-green-400 rounded-full animate-pulse"></span>
+      </p>
+      <p className="text-xs opacity-80">2/11/2026, 11:47:07 PM</p>
+    </div>
+  </div>
+
+  {/* Stats Cards */}
+  <div className="flex justify-between items-center gap-6">
+
+    {/* Total Leads */}
+    <div className="flex flex-col gap-3 w-64 bg-gradient-to-br from-blue-500 to-indigo-600 text-white p-5 rounded-2xl shadow-lg hover:scale-105 transition duration-300">
+      <p className="text-lg font-medium opacity-90">Total Leads</p>
+      <p className="text-3xl font-bold">{overAllLeads.total}</p>
+      <Plus size={30} className="opacity-80 bg-blue-900 rounded-md" />
+    </div>
+
+    {/* In Progress */}
+    <div className="flex flex-col gap-3 w-64 bg-gradient-to-br from-orange-400 to-pink-500 text-white p-5 rounded-2xl shadow-lg hover:scale-105 transition duration-300">
+      <p className="text-lg font-medium opacity-90">In Progress</p>
+      <p className="text-3xl font-bold">{overAllLeads.inProgress}</p>
+      <Target size={30} className="opacity-80 bg-orange-900 rounded-md" />
+    </div>
+
+    {/* Closed Leads */}
+    <div className="flex flex-col gap-3 w-64 bg-gradient-to-br from-green-400 to-emerald-600 text-white p-5 rounded-2xl shadow-lg hover:scale-105 transition duration-300">
+      <p className="text-lg font-medium opacity-90">Closed Leads</p>
+      <p className="text-3xl font-bold">{overAllLeads.closed}</p>
+      <CircleX size={30} className="opacity-80 bg-emerald-900 rounded-md" />
+    </div>
+
+    {/* New Leads */}
+    <div className="flex flex-col gap-3 w-64 bg-gradient-to-br from-purple-500 to-indigo-600 text-white p-5 rounded-2xl shadow-lg hover:scale-105 transition duration-300">
+      <p className="text-lg font-medium opacity-90">New Leads</p>
+      <p className="text-3xl font-bold">{overAllLeads.newLeads}</p>
+      <Plus size={30} className="opacity-80 bg-indigo-900  rounded-md" />
+    </div>
+
+  </div>
+
+  {/* Team Section */}
+  <div className="rounded-2xl shadow-xl bg-white p-6">
+
+    <h2 className="text-2xl font-bold text-gray-800 mb-1">
+      All Team Members
+    </h2>
+    <p className="text-gray-500 text-sm mb-6">
+      Team Members Details
+    </p>
+
+    {/* Search */}
+    <div className="flex items-center bg-gray-100 px-4 py-2 rounded-xl mb-6 focus-within:ring-2 ring-indigo-400 transition">
+      <Search className="w-4 h-4 mr-2 text-gray-500" />
+      <input
+        type="text"
+        placeholder="Search members"
+        className="bg-transparent outline-none text-sm w-full placeholder-gray-500"
+      />
+    </div>
+
+    {/* Table Header */}
+    <div className="grid grid-cols-6 text-sm font-semibold text-indigo-600 border-b pb-3">
+      <p>Member</p>
+      <p>Status</p>
+      <p>Enrolled</p>
+      <p>Role</p>
+      <p>Mode</p>
+      <p>Last Login</p>
+    </div>
+
+    {/* Members List */}
+    <div className="mt-4 space-y-3">
+      {users &&
+        users.map((user) => (
+          <div
+            key={user._id}
+            className="grid grid-cols-6 items-center bg-gradient-to-r from-gray-50 to-gray-100 p-4 rounded-xl hover:shadow-md hover:scale-[1.01] transition duration-300"
+          >
+            <div>
+              <p className="font-semibold text-gray-800">{user.name}</p>
+              <p className="text-xs text-gray-500">{user.email}</p>
+            </div>
+
+            <div>
+              <span
+                className={`px-3 py-1 text-xs font-medium rounded-full ${
+                  user.isActive
+                    ? "bg-green-100 text-green-700"
+                    : "bg-red-100 text-red-700"
+                }`}
+              >
+                {user.isActive ? "Active" : "Inactive"}
+              </span>
+            </div>
+
+            <div className="text-sm text-gray-600">
+              {new Date(user.createdAt).toLocaleDateString()}
+            </div>
+
+            <div className="text-sm text-gray-600">
+              {user.role === "admin" ? "Admin Access" : "Standard User"}
+            </div>
+
+            <div className="text-sm text-gray-600">
+              {user.canWorkFromHome ? "WFH" : "Office"}
+            </div>
+
+            <div className="text-sm text-gray-600">
+              {user.lastLogin
+                ? new Date(user.lastLogin).toLocaleDateString()
+                : "—"}
+            </div>
+          </div>
+        ))}
+    </div>
+  </div>
+</div>
   );
 };
 

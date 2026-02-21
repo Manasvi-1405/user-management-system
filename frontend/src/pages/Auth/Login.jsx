@@ -1,39 +1,39 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 // import { authApi } from "../../api/authApi";
-import {useDispatch} from "react-redux"
+import { useDispatch } from "react-redux";
 import { login } from "../../redux-store/auth/auth";
 import { toast } from "sonner";
 
 const Login = () => {
   const navigate = useNavigate();
- const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
     email: "",
-    password: ""
+    password: "",
   });
-  
+
   const [errors, setErrors] = useState({
     email: "",
-    password: ""
+    password: "",
   });
-  
+
   const [loading, setLoading] = useState(false);
   const [submitError, setSubmitError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
-    
+
     // Clear field error when user starts typing
     if (errors[name]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: ""
+        [name]: "",
       }));
     }
   };
@@ -41,7 +41,7 @@ const Login = () => {
   const validateForm = () => {
     const newErrors = {
       email: "",
-      password: ""
+      password: "",
     };
     let isValid = true;
 
@@ -67,23 +67,30 @@ const Login = () => {
       return;
     }
 
-    dispatch(login(formData)).unwrap().then((res)=>{
-      console.log("res")
-      console.log(res)
-      if(res.status===200){
+    dispatch(login(formData))
+      .unwrap()
+      .then((res) => {
+        console.log("res");
+        console.log(res);
+        if (res.status === 200) {
           localStorage.setItem("token", res.data.data.token);
           localStorage.setItem("currentUser", res.data.data.user.role);
-          toast.success(res.data.message)
-          navigate("/")
-      }
-    }).catch((er)=>{
-      console.log("er")
-      console.log(er)
-      if(er.status===401){
-        toast.error(er.data.data.message)
-      }
-      
-    })
+          localStorage.setItem(
+            "currentUserData",
+            JSON.stringify(res.data.data.user)
+          );
+
+          toast.success(res.data.message);
+          navigate("/");
+        }
+      })
+      .catch((er) => {
+        console.log("er");
+        console.log(er);
+        if (er.status === 401) {
+          toast.error(er.data.data.message);
+        }
+      });
     // setLoading(true);
 
     // const response = await authApi.login(formData);
@@ -104,51 +111,40 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-black">
       <div className="w-full max-w-md bg-white text-black p-8 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-center mb-6">
-          Sign In
-        </h1>
+        <h1 className="text-3xl font-bold text-center mb-6">Sign In</h1>
 
         <form className="space-y-4" onSubmit={handleSubmit}>
-          
           {/* Email */}
           <div>
-            <label className="block text-sm font-medium mb-1">
-              Email
-            </label>
+            <label className="block text-sm font-medium mb-1">Email</label>
             <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
               className={`w-full border px-3 py-2 rounded-md ${
-                errors.email ? 'border-red-500' : 'border-black'
+                errors.email ? "border-red-500" : "border-black"
               }`}
             />
             {errors.email && (
-              <p className="text-red-500 text-xs mt-1">
-                {errors.email}
-              </p>
+              <p className="text-red-500 text-xs mt-1">{errors.email}</p>
             )}
           </div>
 
           {/* Password */}
           <div>
-            <label className="block text-sm font-medium mb-1">
-              Password
-            </label>
+            <label className="block text-sm font-medium mb-1">Password</label>
             <input
               type="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
               className={`w-full border px-3 py-2 rounded-md ${
-                errors.password ? 'border-red-500' : 'border-black'
+                errors.password ? "border-red-500" : "border-black"
               }`}
             />
             {errors.password && (
-              <p className="text-red-500 text-xs mt-1">
-                {errors.password}
-              </p>
+              <p className="text-red-500 text-xs mt-1">{errors.password}</p>
             )}
           </div>
 
@@ -164,9 +160,7 @@ const Login = () => {
 
           {/* Submit Error */}
           {submitError && (
-            <p className="text-red-500 text-sm text-center">
-              {submitError}
-            </p>
+            <p className="text-red-500 text-sm text-center">{submitError}</p>
           )}
 
           {/* Button */}

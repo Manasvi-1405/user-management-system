@@ -14,6 +14,7 @@ import ResetPassword from "./pages/Auth/resetPassword";
 import Settings from "./pages/Auth/dashboard/settingsPage";
 import { Toaster } from "sonner";
 import ProfileSection from "./pages/Auth/dashboard/ProfileSection";
+import HRPage from "./pages/Auth/dashboard/hrPage";
 
 function App() {
   return (
@@ -29,7 +30,7 @@ function App() {
         <Route path="members" element={<Members />} />
         <Route path="design" element={<Design />} />
         <Route path="Settings" element={<Settings></Settings>} />
-        <Route path="leadtimeline" element={<LeadTimelineChart />} />
+        <Route path="hrpage" element={<HRPage></HRPage>}/>
       </Route>
 
       <Route path="/register" element={<Register></Register>}></Route>

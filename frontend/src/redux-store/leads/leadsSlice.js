@@ -54,32 +54,33 @@ export const getAdminStates = createAsyncThunk(
 );
 
 export const getMyLeadsStats = createAsyncThunk(
-  "leads/getLeads",
+  "leads/getMyLeadsStats",
   async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
 
       const response = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/leads/my-leads`,
+        `${import.meta.env.VITE_BASE_URL}/leads/my-leads/stats`,
         {
           headers: {
-            Authorization: `Bearer ${token}`, // ✅ space important
+            Authorization: `Bearer ${token}`,
           },
         }
       );
 
-      return {
+       return {
         status:response.status,
         data:response.data
       }
     } catch (error) {
-      return rejectWithValue({
+       return rejectWithValue({
         status:error.status,
         error:error.response.data
       });
     }
   }
 );
+
 
 export const leadStats = createAsyncThunk(
   "/leads/leadStats",
@@ -225,7 +226,7 @@ extraReducers: (builder) => {
     })
     .addCase(getMyLeadsStats.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.myLeads = action.payload.data.data;
+      state.overAllLeads = action.payload.data.data;
     })
     .addCase(getMyLeadsStats.rejected, (state) => {
       state.isLoading = false;
@@ -286,6 +287,8 @@ extraReducers: (builder) => {
     .addCase(deleteLead.rejected, (state) => {
       state.isLoading = false;
     })
+
+   
   }
 })
   

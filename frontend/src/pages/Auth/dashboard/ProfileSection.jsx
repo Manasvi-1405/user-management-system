@@ -31,6 +31,9 @@ const ProfileSection = () => {
     navigate("/login");
   };
 
+  const user=JSON.parse(localStorage.getItem("currentUserData"))
+  console.log("user",user)
+
   // 🔥 If Signout Page → Show Success UI
   if (isSignoutPage) {
     return (
@@ -70,12 +73,12 @@ const ProfileSection = () => {
         className="flex items-center gap-3 cursor-pointer"
       >
         <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
-          <span className="text-blue-600 font-semibold">M</span>
+          <span className="text-blue-600 font-semibold">s</span>
         </div>
 
         <div>
-          <p className="font-semibold text-gray-800">Manasvi</p>
-          <p className="text-sm text-gray-500">Admin</p>
+          <p className="font-semibold text-gray-800">{user.displayName}</p>
+          <p className="text-sm text-gray-500">{user.role}</p>
         </div>
 
         <ChevronDown size={16} className="text-gray-500" />
@@ -84,9 +87,9 @@ const ProfileSection = () => {
       {open && (
         <div className="absolute right-0 mt-3 w-72 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden z-50">
           <div className="px-5 py-4 border-b">
-            <h3 className="font-semibold text-gray-900 text-lg">Manasvi</h3>
-            <p className="text-gray-500 text-sm">manasvijadon14@gmail.com</p>
-            <p className="text-gray-400 text-sm mt-1">Admin Account</p>
+            <h3 className="font-semibold text-gray-900 text-lg">{user.displayName}</h3>
+            <p className="text-gray-500 text-sm">{user.email}</p>
+            <p className="text-gray-400 text-sm mt-1">{user.role}</p>
           </div>
 
           <button
