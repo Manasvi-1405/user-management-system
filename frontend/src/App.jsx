@@ -8,13 +8,16 @@ import Members from "./pages/Auth/dashboard/Members";
 import Design from "./pages/Auth/dashboard/Design";
 import Register from "./pages/Auth/Register";
 import Login from "./pages/Auth/Login";
-import LeadTimelineChart from "./components/LeadTimelineChart";
 import ForgotPassword from "./pages/Auth/forgotPassword";
 import ResetPassword from "./pages/Auth/resetPassword";
 import Settings from "./pages/Auth/dashboard/settingsPage";
 import { Toaster } from "sonner";
 import ProfileSection from "./pages/Auth/dashboard/ProfileSection";
-import HRPage from "./pages/Auth/dashboard/hrPage";
+import PendingLeavesTable from "./pages/Auth/dashboard/hr/PendingLeaves";
+import ManageHolidays from "./pages/Auth/dashboard/hr/ManageHolidays";
+import GenrateSalarySlip from "./pages/Auth/dashboard/hr/GenrateSalarySlip";
+import PayrollSummary from "./pages/Auth/dashboard/hr/PayrollSummary";
+import AttendanceManagement from "./pages/Auth/dashboard/AttendanceManagement";
 
 function App() {
   return (
@@ -30,7 +33,11 @@ function App() {
         <Route path="members" element={<Members />} />
         <Route path="design" element={<Design />} />
         <Route path="Settings" element={<Settings></Settings>} />
-        <Route path="hrpage" element={<HRPage></HRPage>}/>
+        <Route path="pending-leaves" element={<PendingLeavesTable></PendingLeavesTable>}/>
+        <Route path="manage-holidays" element={<ManageHolidays></ManageHolidays>}/>
+        <Route path="generate-salary-slip" element={<GenrateSalarySlip></GenrateSalarySlip>}/>
+        <Route path="payroll-summary" element={<PayrollSummary></PayrollSummary>}/>
+        <Route path="attendance-management" element={<AttendanceManagement></AttendanceManagement>}/>
       </Route>
 
       <Route path="/register" element={<Register></Register>}></Route>

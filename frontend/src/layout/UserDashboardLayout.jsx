@@ -2,30 +2,86 @@ import {
   Codesandbox,
   House,
   CheckLine,
-  CheckCheck,
   Settings,
-  Twitch,
-  PencilLine,
   FileChartColumn,
   Users,
   Target,
 } from "lucide-react";
-import { Link, Navigate, Outlet, useNavigate } from "react-router-dom";
-import Members from "../pages/Auth/dashboard/Members";
-import Home from "../pages/Auth/dashboard/Home";
+
+import { Link, Navigate, Outlet } from "react-router-dom";
+import { useState } from "react";
 import ProfileSection from "../pages/Auth/dashboard/ProfileSection";
 
+
+// ================= MENU CONFIG =================
+const menuItems = [
+  {
+    name: "Dashboard",
+    path: "/",
+    icon: House,
+  },
+  {
+    name: "Leads Details",
+    path: "/all-leads",
+    icon: Target,
+  },
+  {
+    name: "Attendance",
+    path: "/attendance",
+    icon: FileChartColumn,
+  },
+  {
+    name: "Performance",
+    path: "/performance",
+    icon: CheckLine,
+  },
+  {
+    name: "Members",
+    path: "/members",
+    icon: Users,
+  },
+  {
+    name: "Design",
+    path: "/design",
+    icon: Codesandbox,
+  },
+   {
+    name: "Attendance Management",
+    path: "/attendance-management",
+    icon: Codesandbox,
+  },
+
+  
+  {
+    name: "HR Page",
+    icon: Settings,
+    sublinks: [
+      { name: "Pending leaves", path: "/pending-leaves" },
+      { name: "Manage Holidays", path: "/manage-holidays" },
+      { name: "Generate Salary Slip", path: "/generate-salary-slip" },
+      { name: "Payroll Summary", path: "/payroll-summary" },
+    ],
+  },
+
+  
+];
+// =================================================
+
+
 const UserDashboardLayout = () => {
-  const navigate = useNavigate();
+  const [openMenu, setOpenMenu] = useState(null);
 
   if (!localStorage.getItem("token")) {
     return <Navigate to="/login" replace />;
   }
 
   return (
-    <div className="flex h-screen bg-slate-100">
-      {/* Sidebar */}
-      <aside className="w-64 bg-white opacity-90 text-gray-900 flex flex-col ">
+    <div className="flex h-screen overflow-hidden bg-slate-100">
+      
+      {/* ================= Sidebar ================= */}
+      <aside className="w-64 shrink-0 bg-white opacity-90 text-gray-900 flex flex-col">
+        
+        {/* Logo Section */}
         <div className="px-6 flex items-center gap-3 py-2 text-2xl font-bold border-b border-slate-200">
           <div className="h-10 w-10 bg-yellow-500 rounded-full"></div>
           <p className="text-m mt-2 py-2">
@@ -35,77 +91,76 @@ const UserDashboardLayout = () => {
           </p>
         </div>
 
-        <nav className="flex-1 p-4 ">
-          <ul className="flex flex-col ">
-            <Link
-              to={"/"}
-              className="cursor-pointer flex items-center gap-1 rounded-md w-full px-4 py-2 hover:bg-slate-100"
-            >
-              <House size={15} />
-              Dashboard
-            </Link>
-            <Link
-              to={"/all-leads"}
-              className="cursor-pointer flex items-center gap-1 rounded-md px-4 py-2 hover:bg-slate-100"
-            >
-              <Target size={15} />
-              Leads Details
-            </Link>
-            <Link
-              to={"/attendance"}
-              className="cursor-pointer flex items-center gap-1 rounded-md px-4 py-2 hover:bg-slate-100"
-            >
-              <FileChartColumn size={15} />
-              Attendance
-            </Link>
-            <Link
-              to={"/performance"}
-              className="cursor-pointer flex items-center gap-1  rounded-md px-4 py-2 hover:bg-slate-100"
-            >
-              <CheckLine size={15} />
-              Performance
-            </Link>
-            <Link
-              to={"/members"}
-              className="cursor-pointer flex items-center gap-1  rounded-md px-4 py-2 hover:bg-slate-100"
-            >
-              <Users size={15} />
-              Members
-            </Link>
+        {/* Navigation */}
+        <nav className="flex-1 p-4 overflow-y-auto">
+          <ul className="flex flex-col gap-1">
 
-            <Link
-              to={"/design"}
-              className="cursor-pointer flex items-center gap-1  rounded-md px-4 py-2 hover:bg-slate-100"
-            >
-              <Codesandbox size={15} />
-              Design
-            </Link>
-            <Link
-              to={"/hrpage"}
-              className="cursor-pointer flex items-center gap-1  rounded-md px-4 py-2 hover:bg-slate-100"
-            >
-              Hr-Page
-            </Link>
+            {menuItems.map((item, index) => {
+              const Icon = item.icon;
+
+              // ================== If Item Has Sublinks ==================
+              if (item.sublinks) {
+                return (
+                  <li key={index}>
+                    <div
+                      onClick={() =>
+                        setOpenMenu(openMenu === item.name ? null : item.name)
+                      }
+                      className="cursor-pointer flex items-center gap-2 rounded-md px-4 py-2 hover:bg-slate-100"
+                    >
+                      {Icon && <Icon size={15} />}
+                      {item.name}
+                    </div>
+
+                    {openMenu === item.name && (
+                      <ul className="ml-6 mt-1 flex flex-col gap-1">
+                        {item.sublinks.map((sub, subIndex) => (
+                          <li key={subIndex}>
+                            <Link
+                              to={sub.path}
+                              className="block text-sm px-4 py-2 rounded-md hover:bg-slate-100"
+                            >
+                              {sub.name}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </li>
+                );
+              }
+
+              // ================== Normal Link ==================
+              return (
+                <li key={index}>
+                  <Link
+                    to={item.path}
+                    className="flex items-center gap-2 rounded-md px-4 py-2 hover:bg-slate-100"
+                  >
+                    {Icon && <Icon size={15} />}
+                    {item.name}
+                  </Link>
+                </li>
+              );
+            })}
+
           </ul>
-
-          {/* //setting */}
         </nav>
       </aside>
 
-      {/* Main Section */}
-      <div className="flex flex-1 bg-gray-100 flex-col">
-        {/* Navbar */}
+      {/* ================= Main Section ================= */}
+      <div className="flex flex-1 min-w-0 bg-gray-100 flex-col">
 
-        <header className="flex h-16 items-center justify-end px-6 shadow-sm bg-white">
+        {/* Navbar */}
+        <header className="flex h-16 items-center justify-end px-6 shadow-sm bg-white shrink-0">
           <ProfileSection />
         </header>
 
+        {/* Page Content */}
         <main className="flex-1 overflow-y-auto p-6">
           <Outlet />
         </main>
-        <div>
-          <main className="flex-1 overflow-y-auto p-6"></main>
-        </div>
+
       </div>
     </div>
   );

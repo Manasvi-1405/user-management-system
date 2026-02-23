@@ -1,8 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { CalendarRange, Calendar } from "lucide-react";
+import { CalendarRange, Calendar, Send } from "lucide-react";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 
 import {
   Select,
@@ -43,6 +52,7 @@ import {
   myAttendanceHistory,
 } from "../../../redux-store/attendance-reducers/attendanceSlice";
 import { toast } from "sonner";
+import { applyLeaves } from "../../../redux-store/hr-management/leavesSlice";
 
 const DashboardCard = ({ title, value, icon }) => {
   return (
@@ -60,10 +70,10 @@ const Attendance = () => {
   const [selectedView, setSelectedView] = useState("10");
   const [isColckedIn, setIsClockedIn] = useState(false);
   const dispatch = useDispatch();
-const { adminReport}=useSelector((state)=>state.attendance)
+  const { adminReport } = useSelector((state) => state.attendance)
   const { myAttendanceHistoryy } = useSelector((state) => state.attendance);
   const { workingHours } = useSelector((state) => state.attendance);
-  // const { getMonthlyReport } = useSelector((state) => state.attendance); // ✅ state variable kept as-is
+  //const { getMonthlyReport } = useSelector((state) => state.attendance); // ✅ state variable kept as-is
   const summary = {
     today: adminReport?.today?.length || 0,
     thisWeek: adminReport?.thisWeek?.length || 0,
@@ -73,7 +83,7 @@ const { adminReport}=useSelector((state)=>state.attendance)
     activeNow: adminReport?.activeNow || 0,
     absentToday: adminReport?.absentToday || 0
   };
-  
+
   const groupedByDate = adminReport?.groupedByDate || {};
   async function genrateLocation() {
     navigator.geolocation.getCurrentPosition(
@@ -152,7 +162,7 @@ const { adminReport}=useSelector((state)=>state.attendance)
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch( getAdminReport())
+    dispatch(getAdminReport())
       .unwrap()
       .then((res) => {
         console.log(" getAdminReport");
@@ -193,27 +203,172 @@ const { adminReport}=useSelector((state)=>state.attendance)
       });
   }, [dispatch]);
 
+
+
+  // apply for leave logic code
+
+
+
+  const [open, setOpen] = useState(false);
+
+  const [formData, setFormData] = useState({
+    user: "",
+    startDate: "",
+    endDate: "",
+    reason: "",
+  });
+
+  // Calculate total days (same as backend logic)
+  const totalDays = useMemo(() => {
+    if (!formData.startDate || !formData.endDate) return 0;
+
+    const start = new Date(formData.startDate);
+    const end = new Date(formData.endDate);
+
+    if (end < start) return 0;
+
+    return (
+      Math.ceil((end.getTime() - start.getTime()) / (1000 * 3600 * 24)) + 1
+    );
+  }, [formData.startDate, formData.endDate]);
+
+  const handleSubmit = () => {
+    // if (!formData.user) {
+    //   alert("User ID is required");
+    //   return;
+    // }
+const rawUserData=localStorage.getItem("currentUserData")
+console.log("rawData",rawUserData)
+    const payload = {
+      ...formData,
+      user:JSON.parse(rawUserData?.id),
+      totalDays,
+    };
+
+    // 🔌 TODO: Replace with dispatch(applyLeave(payload))
+    console.log("Apply Leave Payload:", payload);
+    dispatch(applyLeaves(formData)).unwrap().then((res)=>{
+      console.log("applyLeaves",res)
+    }).catch((err)=>{
+      console.log("err",err)
+    })
+
+    setOpen(false);
+    setFormData({
+      user: "",
+      startDate: "",
+      endDate: "",
+      reason: "",
+    });
+  };
+
+  // end apply leave
+
   
- 
+
+
+
 
   return (
     <>
       {/* ── Employee View ── */}
       <div className="min-h-screen space-y-6">
         {/* Header Section */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Badge variant="outline" className="px-4 py-2 bg-white shadow-sm">
-              <CalendarDays className="w-4 h-4 mr-2 text-blue-600" />
-              {new Date().toLocaleDateString("en-US", {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </Badge>
+
+        <div className="flex justify-between">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Badge variant="outline" className="px-4 py-2 bg-white shadow-sm">
+                <CalendarDays className="w-4 h-4 mr-2 text-blue-600" />
+                {new Date().toLocaleDateString("en-US", {
+                  weekday: "long",
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </Badge>
+            </div>
+          </div>
+
+          {/* for leave application */}
+          <div className="">
+            {/* Trigger Button */}
+            <Button
+              onClick={() => setOpen(true)}
+              className="flex items-center gap-2"
+            >
+              <CalendarDays className="w-4 h-4" />
+              Apply for Leave
+            </Button>
+
+            <Dialog open={open} onOpenChange={setOpen}>
+              <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                  <DialogTitle>Apply Leave</DialogTitle>
+                </DialogHeader>
+
+                <div className="space-y-4">
+                 
+
+                  <div>
+                    <label className="text-sm font-medium">Start Date</label>
+                    <Input
+                      type="date"
+                      value={formData.startDate}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          startDate: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-sm font-medium">End Date</label>
+                    <Input
+                      type="date"
+                      value={formData.endDate}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          endDate: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+
+                  <Input
+                    placeholder="Reason"
+                    value={formData.reason}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        reason: e.target.value,
+                      })
+                    }
+                  />
+
+                  {/* Total Days Preview */}
+                  <div className="bg-muted p-3 rounded-lg text-sm">
+                    <span className="font-medium">Total Days: </span>
+                    {totalDays}
+                  </div>
+                </div>
+
+                <DialogFooter>
+                  <Button variant="outline" onClick={() => setOpen(false)}>
+                    Cancel
+                  </Button>
+                  <Button onClick={handleSubmit}>
+                    Submit
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
+
 
         {/* Status + Actions Card */}
         {/* ✅ FIX 6: added relative so the absolute colored bar is positioned correctly */}
@@ -270,6 +425,9 @@ const { adminReport}=useSelector((state)=>state.attendance)
             </div>
           </CardContent>
         </Card>
+
+
+
 
         {/* Enhanced Stats Section */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -431,7 +589,7 @@ const { adminReport}=useSelector((state)=>state.attendance)
 
       </div>
 
-    
+
 
       {/* ── Admin View (renders only when adminStates is populated) ── */}
       {/* {adminStates?.summary && (
@@ -469,4 +627,3 @@ const { adminReport}=useSelector((state)=>state.attendance)
 };
 
 export default Attendance;
-

@@ -71,6 +71,8 @@ const Home = () => {
     fetchData();
   }, [dispatch]);
 
+
+
   return (
     <div className="flex flex-col bg-gradient-to-br from-indigo-50 via-blue-50 to-purple-50 gap-6 p-6">
 

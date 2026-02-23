@@ -4,6 +4,7 @@ import auth from "./auth/auth"
 import attendance from "./attendance-reducers/attendanceSlice"
 import leads from './leads/leadsSlice'
 import performance from "./performance/performanceSlice"
+import leavesSlice from "./hr-management/leavesSlice"
 // Create the Redux store
 const store = configureStore({
   reducer: {
@@ -11,7 +12,8 @@ const store = configureStore({
     attendance: attendance,
     auth: auth,
    leads: leads,
-   performance:performance
+   performance:performance,
+   leavesSlice:leavesSlice 
 
 }})
 
