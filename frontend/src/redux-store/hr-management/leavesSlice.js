@@ -111,6 +111,33 @@ export const applyLeaves = createAsyncThunk(
   }
 );
 
+export const updatedLeaves = createAsyncThunk(
+  "hr/updatedLeaves",
+  async (applyLeaves, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.patch(
+        `${import.meta.env.VITE_BASE_URL}/hr/leaves/status/:id`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return {
+        status: response.status,
+        data: response.data,
+      };
+    } catch (error) {
+      return rejectWithValue({
+        status: error.status,
+        data: error.response.data,
+        // err:error
+      });
+    }
+  }
+);
+
 
 
 
@@ -119,7 +146,7 @@ const initialState = {
   iscreateUserLoading: false,
   holidayList: [],
   pendingLeaves:[],
-  applyLeaves:[]
+  applyLeaves:{}
 };
 
 const leavesSlice = createSlice({
@@ -154,6 +181,7 @@ const leavesSlice = createSlice({
       })
       .addCase(getPendingLeaves.fulfilled, (state,action) => {
         state.iscreateUserLoading = false;
+        state.pendingLeaves=action.payload.data.data
         
         
       })
@@ -169,6 +197,16 @@ const leavesSlice = createSlice({
         
       })
       .addCase(applyLeaves.rejected, (state) => {
+        state.iscreateUserLoading = false;
+      })
+        .addCase(updatedLeaves.pending, (state) => {
+        state.iscreateUserLoading = true;
+      })
+      .addCase(updatedLeaves.fulfilled, (state) => {
+        state.iscreateUserLoading = false;
+        
+      })
+      .addCase(updatedLeaves.rejected, (state) => {
         state.iscreateUserLoading = false;
       });
   },

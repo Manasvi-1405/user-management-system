@@ -8,8 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 export default function PendingLeavesTable() {
 const dispatch=useDispatch()
 
-const{pendingLeavs}=useSelector((state)=>state.leavesSlice)
-console.log("pendingLeavs",pendingLeavs)
+const{pendingLeaves}=useSelector((state)=>state.leavesSlice)
+console.log("pendingLeavs",pendingLeaves)
 
   useEffect(()=>{
     dispatch(getPendingLeaves()).unwrap().then((res)=>{
@@ -53,27 +53,27 @@ console.log("pendingLeavs",pendingLeavs)
 
             {/* Table Body */}
             <tbody>
-              {/* {pendingLeavs.map((leave,index) => (
+               {pendingLeaves.map((leave,index) => (
                 <tr
-                  key={pendingLeavs.id}
+                  key={leave.id}
                   className="border-b hover:bg-gray-50 transition"
                 >
                      <td className="px-6 py-4 border text-center whitespace-nowrap font-medium text-gray-800">
                     {index +1}
                   </td>
                   <td className="px-6 py-4 border text-center whitespace-nowrap font-medium text-gray-800">
-                    {pendingLeavs.name}
+                    {leave.user.name}
                   </td>
-                  <td className="px-2 border text-center whitespace-nowrap py-4">{pendingLeavs.leaveType}</td>
-                  <td className="px-2 border text-center whitespace-nowrap py-4">{pendingLeavs.startDate}</td>
-                  <td className="px-2 border text-center whitespace-nowrap py-4">{pendingLeavs.endDate}</td>
-                  <td className="px-2 border text-center whitespace-nowrap py-4">{pendingLeavs.totalDays}</td>
+                  <td className="px-2 border text-center whitespace-nowrap py-4">{leave.leaveType}</td>
+                  <td className="px-2 border text-center whitespace-nowrap py-4">{leave.startDate}</td>
+                  <td className="px-2 border text-center whitespace-nowrap py-4">{leave.endDate}</td>
+                  <td className="px-2 border text-center whitespace-nowrap py-4">{leave.totalDays}</td>
                   <td className="px-2 border text-center whitespace-nowrap py-4 max-w-xs truncate">
-                    {pendingLeavs.reason}
+                    {leave.reason}
                   </td>
                   <td className="px-6 py-4 border">
                     <span className="px-3 py-1 text-xs  text-center font-medium bg-yellow-100 text-yellow-700 rounded-full">
-                      {pendingLeavs.status}
+                      {leave.status}
                     </span>
                   </td>
                   <td className="px-6 py-4 flex text-center   space-x-2">
@@ -85,7 +85,8 @@ console.log("pendingLeavs",pendingLeavs)
                     </button>
                   </td>
                 </tr>
-              ))} */}
+               
+              ))} 
             </tbody>
 
           </table>

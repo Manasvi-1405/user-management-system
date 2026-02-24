@@ -38,6 +38,8 @@ function App() {
         <Route path="generate-salary-slip" element={<GenrateSalarySlip></GenrateSalarySlip>}/>
         <Route path="payroll-summary" element={<PayrollSummary></PayrollSummary>}/>
         <Route path="attendance-management" element={<AttendanceManagement></AttendanceManagement>}/>
+        {/* <Route path="update-leave" element={<UpdateLeave></UpdateLeave>}/> */}
+
       </Route>
 
       <Route path="/register" element={<Register></Register>}></Route>

@@ -70,7 +70,7 @@ const Attendance = () => {
   const [selectedView, setSelectedView] = useState("10");
   const [isColckedIn, setIsClockedIn] = useState(false);
   const dispatch = useDispatch();
-  const { adminReport } = useSelector((state) => state.attendance)
+  const { adminReport } = useSelector((state) => state.attendance);
   const { myAttendanceHistoryy } = useSelector((state) => state.attendance);
   const { workingHours } = useSelector((state) => state.attendance);
   //const { getMonthlyReport } = useSelector((state) => state.attendance); // ✅ state variable kept as-is
@@ -81,7 +81,7 @@ const Attendance = () => {
     thisYear: adminReport?.thisYear?.length || 0,
     totalEmployees: adminReport?.totalEmployees || 0,
     activeNow: adminReport?.activeNow || 0,
-    absentToday: adminReport?.absentToday || 0
+    absentToday: adminReport?.absentToday || 0,
   };
 
   const groupedByDate = adminReport?.groupedByDate || {};
@@ -203,11 +203,7 @@ const Attendance = () => {
       });
   }, [dispatch]);
 
-
-
   // apply for leave logic code
-
-
 
   const [open, setOpen] = useState(false);
 
@@ -216,6 +212,7 @@ const Attendance = () => {
     startDate: "",
     endDate: "",
     reason: "",
+    leaveType: "",
   });
 
   // Calculate total days (same as backend logic)
@@ -233,41 +230,44 @@ const Attendance = () => {
   }, [formData.startDate, formData.endDate]);
 
   const handleSubmit = () => {
-    // if (!formData.user) {
-    //   alert("User ID is required");
-    //   return;
-    // }
-const rawUserData=localStorage.getItem("currentUserData")
-console.log("rawData",rawUserData)
+    const rawUserData = localStorage.getItem("currentUserData");
+
+    // Step 1: Parse whole object
+    const parsedUser = rawUserData ? JSON.parse(rawUserData) : null;
+
+    console.log("parsedUser", parsedUser);
+
     const payload = {
       ...formData,
-      user:JSON.parse(rawUserData?.id),
+      user: parsedUser?.id, // ✅ proper user id
       totalDays,
     };
 
-    // 🔌 TODO: Replace with dispatch(applyLeave(payload))
     console.log("Apply Leave Payload:", payload);
-    dispatch(applyLeaves(formData)).unwrap().then((res)=>{
-      console.log("applyLeaves",res)
-    }).catch((err)=>{
-      console.log("err",err)
-    })
+
+    dispatch(applyLeaves(payload)) // ✅ payload bhejo, formData nahi
+      .unwrap()
+      .then((res) => {
+        console.log("applyLeaves", res);
+        if (res.status === 201) toast.success(res.data.message);
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
 
     setOpen(false);
+
     setFormData({
       user: "",
       startDate: "",
       endDate: "",
       reason: "",
+      leaveType: "",
     });
+    
   };
 
   // end apply leave
-
-  
-
-
-
 
   return (
     <>
@@ -308,8 +308,6 @@ console.log("rawData",rawUserData)
                 </DialogHeader>
 
                 <div className="space-y-4">
-                 
-
                   <div>
                     <label className="text-sm font-medium">Start Date</label>
                     <Input
@@ -348,6 +346,28 @@ console.log("rawData",rawUserData)
                       })
                     }
                   />
+                  <div>
+                    <label className="text-sm font-medium">Leave Type</label>
+                    <Select
+                      value={formData.leaveType}
+                      onValueChange={(value) =>
+                        setFormData({
+                          ...formData,
+                          leaveType: value,
+                        })
+                      }
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select Leave Type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Sick">Sick</SelectItem>
+                        <SelectItem value="Casual">Casual</SelectItem>
+                        <SelectItem value="Paid">Paid</SelectItem>
+                        <SelectItem value="Unpaid">Unpaid</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
 
                   {/* Total Days Preview */}
                   <div className="bg-muted p-3 rounded-lg text-sm">
@@ -357,18 +377,44 @@ console.log("rawData",rawUserData)
                 </div>
 
                 <DialogFooter>
-                  <Button variant="outline" onClick={() => setOpen(false)}>
-                    Cancel
+                  {/* <Button
+                    variant="outline"
+                    onClick={() => {
+                      setFormData({
+                        user: formData.user,
+                        startDate: formData.startDate,
+                        endDate: formData.endDate,
+                        reason: formData.reason,
+                        leaveType: formData.leaveType,
+                      });
+                      setOpen(true);
+                    }}
+                  >
+                    Edit
+                  </Button> */}
+                   
+                  <Button
+ 
+                    variant="outline"
+                    onClick={() => {
+                      const existingData = { ...formData };
+
+                      setOpen(false);
+
+                      setTimeout(() => {
+                        setFormData(existingData);
+                        setOpen(true);
+                      }, 0);
+                    }}
+                  >
+                    Edit
                   </Button>
-                  <Button onClick={handleSubmit}>
-                    Submit
-                  </Button>
+                  <Button onClick={handleSubmit}>Submit</Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>
           </div>
         </div>
-
 
         {/* Status + Actions Card */}
         {/* ✅ FIX 6: added relative so the absolute colored bar is positioned correctly */}
@@ -426,9 +472,6 @@ console.log("rawData",rawUserData)
           </CardContent>
         </Card>
 
-
-
-
         {/* Enhanced Stats Section */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-200 bg-white">
@@ -439,7 +482,9 @@ console.log("rawData",rawUserData)
                   <p className="text-3xl font-bold text-slate-800 mt-2">
                     {workingHours.totalHours}
                   </p>
-                  <p className="text-xs text-green-600 mt-2">+15% vs yesterday</p>
+                  <p className="text-xs text-green-600 mt-2">
+                    +15% vs yesterday
+                  </p>
                 </div>
                 <div className="p-3 bg-blue-100 rounded-2xl">
                   <Clock className="w-6 h-6 text-blue-600" />
@@ -538,11 +583,21 @@ console.log("rawData",rawUserData)
               <Table>
                 <TableHeader className="bg-slate-50">
                   <TableRow className="hover:bg-slate-50">
-                    <TableHead className="font-semibold text-slate-600">Date</TableHead>
-                    <TableHead className="font-semibold text-slate-600">Clock In</TableHead>
-                    <TableHead className="font-semibold text-slate-600">Hours Worked</TableHead>
-                    <TableHead className="font-semibold text-slate-600">Location</TableHead>
-                    <TableHead className="font-semibold text-slate-600">Status</TableHead>
+                    <TableHead className="font-semibold text-slate-600">
+                      Date
+                    </TableHead>
+                    <TableHead className="font-semibold text-slate-600">
+                      Clock In
+                    </TableHead>
+                    <TableHead className="font-semibold text-slate-600">
+                      Hours Worked
+                    </TableHead>
+                    <TableHead className="font-semibold text-slate-600">
+                      Location
+                    </TableHead>
+                    <TableHead className="font-semibold text-slate-600">
+                      Status
+                    </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -586,10 +641,7 @@ console.log("rawData",rawUserData)
             </div>
           </CardContent>
         </Card>
-
       </div>
-
-
 
       {/* ── Admin View (renders only when adminStates is populated) ── */}
       {/* {adminStates?.summary && (
