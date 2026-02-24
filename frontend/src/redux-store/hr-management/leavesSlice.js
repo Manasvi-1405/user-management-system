@@ -113,11 +113,67 @@ export const applyLeaves = createAsyncThunk(
 
 export const updatedLeaves = createAsyncThunk(
   "hr/updatedLeaves",
-  async (applyLeaves, { rejectWithValue }) => {
+  async (payload, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.patch(
-        `${import.meta.env.VITE_BASE_URL}/hr/leaves/status/:id`,
+        `${import.meta.env.VITE_BASE_URL}/hr/leaves/status/${payload.currentPendingLeaveId}`,{status:payload.status},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return {
+        status: response.status,
+        data: response.data,
+      };
+    } catch (error) {
+      return rejectWithValue({
+        status: error.status,
+        data: error.response.data,
+        // err:error
+      });
+    }
+  }
+);
+
+
+export const genrateSalarySlip = createAsyncThunk(
+  "hr/genrateSalarySlip",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/hr/payroll/slip/${payload.userId}?month=${payload.month}&year=${payload.year}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return {
+        status: response.status,
+        data: response.data,
+      };
+    } catch (error) {
+      return rejectWithValue({
+        status: error.status,
+        data: error.response.data,
+        // err:error
+      });
+    }
+  }
+);
+
+
+export const payrollSummary = createAsyncThunk(
+  "hr/payrollSummary",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/hr/payroll/summary/?month=${payload.month}&year=${payload.year}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -146,7 +202,8 @@ const initialState = {
   iscreateUserLoading: false,
   holidayList: [],
   pendingLeaves:[],
-  applyLeaves:{}
+  applyLeaves:{},
+  companyPayrollSummaryData:{}
 };
 
 const leavesSlice = createSlice({
@@ -200,15 +257,40 @@ const leavesSlice = createSlice({
         state.iscreateUserLoading = false;
       })
         .addCase(updatedLeaves.pending, (state) => {
-        state.iscreateUserLoading = true;
+        state.isLoading = true;
       })
       .addCase(updatedLeaves.fulfilled, (state) => {
-        state.iscreateUserLoading = false;
+        state.isLoading = false;
         
       })
       .addCase(updatedLeaves.rejected, (state) => {
-        state.iscreateUserLoading = false;
-      });
+        state.isLoading = false;
+      })
+
+       .addCase(genrateSalarySlip.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(genrateSalarySlip.fulfilled, (state) => {
+        state.isLoading = false;
+        
+      })
+      .addCase(genrateSalarySlip.rejected, (state) => {
+        state.isLoading = false;
+      })
+      
+             .addCase(payrollSummary.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(payrollSummary.fulfilled, (state,action) => {
+        state.isLoading = false;
+        state.companyPayrollSummaryData=action.payload.data.data
+        
+      })
+      .addCase(payrollSummary.rejected, (state) => {
+        state.isLoading = false;
+      });;
+
+      
   },
 });
 export default leavesSlice.reducer;

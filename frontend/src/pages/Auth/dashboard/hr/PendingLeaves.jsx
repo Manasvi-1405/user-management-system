@@ -1,14 +1,15 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { getPendingLeaves } from "../../../../redux-store/hr-management/leavesSlice";
+import { getPendingLeaves, updatedLeaves } from "../../../../redux-store/hr-management/leavesSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "sonner";
 
 
 export default function PendingLeavesTable() {
 const dispatch=useDispatch()
 
-const{pendingLeaves}=useSelector((state)=>state.leavesSlice)
+const{pendingLeaves,isLoading}=useSelector((state)=>state.leavesSlice)
 console.log("pendingLeavs",pendingLeaves)
 
   useEffect(()=>{
@@ -18,6 +19,47 @@ console.log("pendingLeavs",pendingLeaves)
       console.log("err",err)
     })
   },[dispatch])
+
+  function handleApprove(leave){
+    console.log("leave")
+    console.log(leave._id)
+    const payload={
+      currentPendingLeaveId:leave._id,
+      status:"Approved"
+    }
+
+    dispatch(updatedLeaves(payload)).unwrap().then((res)=>{
+      console.log("res")
+      console.log(res)
+      if(res.status===200){
+        toast.success(res.data.message)
+      }
+    }).catch((er)=>{
+      console.log("er")
+      console.log(er)
+    })
+  }
+
+
+   function handleReject(leave){
+    console.log("leave")
+    console.log(leave._id)
+    const payload={
+      currentPendingLeaveId:leave._id,
+      status:"Rejected"
+    }
+
+    dispatch(updatedLeaves(payload)).unwrap().then((res)=>{
+      console.log("res")
+      console.log(res)
+      if(res.status===200){
+        toast.success(res.data.message)
+      }
+    }).catch((er)=>{
+      console.log("er")
+      console.log(er)
+    })
+  }
 
   return (
     <div className="min-h-screen  ">
@@ -77,10 +119,11 @@ console.log("pendingLeavs",pendingLeaves)
                     </span>
                   </td>
                   <td className="px-6 py-4 flex text-center   space-x-2">
-                    <button className="px-3 py-1 text-xs bg-green-500 hover:bg-green-600 text-white rounded-md transition">
-                      Approve
+                    <button onClick={()=>handleApprove(leave)} className="px-3 py-1 text-xs bg-green-500 hover:bg-green-600 text-white rounded-md transition">
+                      {isLoading?<span className="h-4 w-4 animate-spin border-t border-t-white border-2 border-gray-700 rounded-full "></span>:"Approve"}
+                      
                     </button>
-                    <button className="px-3 py-1 text-xs bg-red-500 hover:bg-red-600 text-white rounded-md transition">
+                    <button  onClick={()=>handleReject(leave)} className="px-3 py-1 text-xs bg-red-500 hover:bg-red-600 text-white rounded-md transition">
                       Reject
                     </button>
                   </td>

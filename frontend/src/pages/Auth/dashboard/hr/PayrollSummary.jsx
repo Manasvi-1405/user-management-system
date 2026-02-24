@@ -22,67 +22,82 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Users, Calendar, BarChart3 } from "lucide-react";
+import { payrollSummary } from "../../../../redux-store/hr-management/leavesSlice";
+import { toast } from "sonner";
+import { useDispatch, useSelector } from "react-redux";
 
 const PayrollSummary = () => {
+  const dispatch=useDispatch()
+  const {companyPayrollSummaryData}=useSelector((state)=>state.leavesSlice)
   const [filters, setFilters] = useState({
     month: "",
     year: "",
   });
 
   // 🧠 Dummy Response (Based on Backend Structure)
-  const dummyData = {
-    summary: {
-      totalEmployees: 3,
-      totalPayableDays: 72,
-      totalLOPDays: 6,
-      month: "January",
-      year: 2026,
-    },
-    employees: [
-      {
-        employee: {
-          id: "1",
-          name: "Amit Sharma",
-          email: "amit@company.com",
-        },
-        payableDays: 24,
-        lopDays: 2,
-      },
-      {
-        employee: {
-          id: "2",
-          name: "Priya Verma",
-          email: "priya@company.com",
-        },
-        payableDays: 25,
-        lopDays: 1,
-      },
-      {
-        employee: {
-          id: "3",
-          name: "Rahul Singh",
-          email: "rahul@company.com",
-        },
-        payableDays: 23,
-        lopDays: 3,
-      },
-    ],
-  };
+  // const dummyData = {
+  //   summary: {
+  //     totalEmployees: 3,
+  //     totalPayableDays: 72,
+  //     totalLOPDays: 6,
+  //     month: "January",
+  //     year: 2026,
+  //   },
+  //   employees: [
+  //     {
+  //       employee: {
+  //         id: "1",
+  //         name: "Amit Sharma",
+  //         email: "amit@company.com",
+  //       },
+  //       payableDays: 24,
+  //       lopDays: 2,
+  //     },
+  //     {
+  //       employee: {
+  //         id: "2",
+  //         name: "Priya Verma",
+  //         email: "priya@company.com",
+  //       },
+  //       payableDays: 25,
+  //       lopDays: 1,
+  //     },
+  //     {
+  //       employee: {
+  //         id: "3",
+  //         name: "Rahul Singh",
+  //         email: "rahul@company.com",
+  //       },
+  //       payableDays: 23,
+  //       lopDays: 3,
+  //     },
+  //   ],
+  // };
 
   const handleFetchSummary = () => {
     if (!filters.month || !filters.year) return;
 
     // 🔌 TODO: Replace with dispatch or API call
     console.log("Fetch Payroll Summary:", filters);
+     dispatch(payrollSummary(filters))
+      .unwrap()
+      .then((res) => {
+        console.log("res");
+        console.log(res);
+        if (res.status === 200) {
+          toast.success("Done");
+        
+        }
+      })
+      .catch((er) => {
+        console.log("er");
+     
 
-    /*
-    axios.get("/payroll-summary", {
-      params: {
-        month: filters.month,
-        year: filters.year
-      }
-    })
-    */
+        if(er){
+          toast.error(er.data.message)
+        }
+      });
+  
   };
 
   return (
@@ -154,7 +169,7 @@ const PayrollSummary = () => {
               Total Employees
             </p>
             <h2 className="text-3xl font-bold">
-              {dummyData.summary.totalEmployees}
+              {companyPayrollSummaryData?.summary?.totalEmployees}
             </h2>
           </CardContent>
         </Card>
@@ -165,7 +180,7 @@ const PayrollSummary = () => {
               Total Payable Days
             </p>
             <h2 className="text-3xl font-bold">
-              {dummyData.summary.totalPayableDays}
+              {companyPayrollSummaryData?.summary?.totalPayableDays}
             </h2>
           </CardContent>
         </Card>
@@ -176,7 +191,7 @@ const PayrollSummary = () => {
               Total LOP Days
             </p>
             <h2 className="text-3xl font-bold">
-              {dummyData.summary.totalLOPDays}
+              {companyPayrollSummaryData?.summary?.totalLOPDays}
             </h2>
           </CardContent>
         </Card>
@@ -186,8 +201,8 @@ const PayrollSummary = () => {
       <Card className="rounded-2xl shadow-sm">
         <CardHeader>
           <CardTitle>
-            Employee Breakdown - {dummyData.summary.month}{" "}
-            {dummyData.summary.year}
+            Employee Breakdown - {companyPayrollSummaryData?.summary?.month}{" "}
+            {companyPayrollSummaryData?.summary?.year}
           </CardTitle>
         </CardHeader>
 
@@ -202,7 +217,7 @@ const PayrollSummary = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {dummyData.employees.map((emp) => (
+              {companyPayrollSummaryData?.employees?.map((emp) => (
                 <TableRow key={emp.employee.id}>
                   <TableCell className="font-medium">
                     {emp.employee.name}

@@ -1,10 +1,5 @@
-import React, { useState } from "react";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-} from "@/components/ui/card";
+import React, { useEffect, useState } from "react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import {
   Table,
   TableHeader,
@@ -30,17 +25,26 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { FileText, Users } from "lucide-react";
+import { getUsers } from "../../../../redux-store/user-reducers/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "sonner";
+import { genrateSalarySlip } from "../../../../redux-store/hr-management/leavesSlice";
 
 const GenrateSalarySlip = () => {
   // Dummy Users
-  const users = [
-    { id: "u1", name: "Amit Sharma", email: "amit@company.com" },
-    { id: "u2", name: "Priya Verma", email: "priya@company.com" },
-    { id: "u3", name: "Rahul Singh", email: "rahul@company.com" },
-  ];
+  // const users = [
+  //   { id: "u1", name: "Amit Sharma", email: "amit@company.com" },
+  //   { id: "u2", name: "Priya Verma", email: "priya@company.com" },
+  //   { id: "u3", name: "Rahul Singh", email: "rahul@company.com" },
+  // ];
 
   const [selectedUser, setSelectedUser] = useState(null);
   const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
+  const { users, isLoading } = useSelector((state) => state.users);
+
+  console.log("users");
+  console.log(users);
 
   const [payload, setPayload] = useState({
     month: "",
@@ -51,7 +55,7 @@ const GenrateSalarySlip = () => {
     if (!payload.month || !payload.year) return;
 
     const finalPayload = {
-      userId: selectedUser?.id,
+      userId: selectedUser?._id,
       month: payload.month,
       year: payload.year,
     };
@@ -59,10 +63,40 @@ const GenrateSalarySlip = () => {
     // 🔌 TODO: Replace with dispatch or API call
     // getSalarySlipData(userId, { month, year })
     console.log("Dispatch salary slip generation:", finalPayload);
+    dispatch(genrateSalarySlip(finalPayload))
+      .unwrap()
+      .then((res) => {
+        console.log("res");
+        console.log(res);
+        if (res.status === 200) {
+          toast.success("Done");
+          setOpen(false);
+          setPayload({ month: "", year: "" });
+        }
+      })
+      .catch((er) => {
+        console.log("er");
+     
 
-    setOpen(false);
-    setPayload({ month: "", year: "" });
+        if(er){
+          toast.error(er.data.message)
+        }
+      });
   };
+
+  useEffect(() => {
+    dispatch(getUsers())
+      .unwrap()
+      .then((res) => {
+        console.log("res", res);
+        if (res.status === 200) {
+          toast.success(res.data.message);
+        }
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+  }, [dispatch]);
 
   return (
     <div className=" mx-auto  space-y-2">
@@ -89,9 +123,7 @@ const GenrateSalarySlip = () => {
             <TableBody>
               {users.map((user) => (
                 <TableRow key={user.id}>
-                  <TableCell className="font-medium">
-                    {user.name}
-                  </TableCell>
+                  <TableCell className="font-medium">{user.name}</TableCell>
                   <TableCell>{user.email}</TableCell>
                   <TableCell className="text-right flex justify-end">
                     <Button
@@ -136,8 +168,18 @@ const GenrateSalarySlip = () => {
                 </SelectTrigger>
                 <SelectContent>
                   {[
-                    "1","2","3","4","5","6",
-                    "7","8","9","10","11","12"
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                    "6",
+                    "7",
+                    "8",
+                    "9",
+                    "10",
+                    "11",
+                    "12",
                   ].map((m) => (
                     <SelectItem key={m} value={m}>
                       {new Date(0, m - 1).toLocaleString("default", {
@@ -150,7 +192,6 @@ const GenrateSalarySlip = () => {
             </div>
 
             <div>
-               
               <label className="text-sm font-medium">Year</label>
               <Input
                 type="number"
