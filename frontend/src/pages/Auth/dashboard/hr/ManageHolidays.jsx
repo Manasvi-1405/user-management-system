@@ -16,77 +16,66 @@ import { addHolidays, getHolidays } from "../../../../redux-store/hr-management/
 import { toast } from "sonner";
 
 const ManageHolidays = () => {
-  const [holidays, setHolidays] = useState([
-    { name: "New Year", date: "2026-01-01", type: "Public" },
-    { name: "Annual Meetup", date: "2026-03-15", type: "Company-Event" },
-  ]);
 
+  const dispatch = useDispatch();
 
-  const dispatch=useDispatch()
-  
-const { holidayList}=useSelector((state)=>state.leavesSlice)
-console.log("holidayList")
-console.log(holidayList)
+  const { holidayList } = useSelector((state) => state.leavesSlice);
+
   const [formData, setFormData] = useState({
     name: "",
     date: "",
     type: "Public",
   });
 
-
-
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!formData.name || !formData.date) return; 
+    if (!formData.name || !formData.date) return;
 
-    // 🔌 TODO: Replace with dispatch(addHoliday(formData))
-    console.log("Dispatch addHoliday here:", formData);
-    dispatch(addHolidays(formData)).unwrap().then((res)=>{
-      console.log("addHolidays",res)
-      if(res.status===201){
-        toast.success(res.data.message)
-        dispatch(getHolidays())
+    dispatch(addHolidays(formData)).unwrap().then((res) => {
+      if (res.status === 201) {
+        toast.success(res.data.message);
+        dispatch(getHolidays());
       }
-    }).catch((err)=>{
-      console.log("err",err)
-    })
+    }).catch((err) => {
+      console.log("err", err);
+    });
 
     setHolidays((prev) => [...prev, formData]);
+    
 
     setFormData({
       name: "",
       date: "",
       type: "Public",
     });
+  };
 
-};
-
-
-//
-  useEffect(()=>{
-  dispatch(getHolidays()).unwrap().then((res)=>{
-    console.log("getHolidays",res)
-
-  }).catch((err)=>{
-    console.log("err",err)
-  })
-},[dispatch])
-
-
+  useEffect(() => {
+    dispatch(getHolidays()).unwrap().then((res) => {
+      console.log("getHolidays", res);
+    }).catch((err) => {
+      console.log("err", err);
+    });
+  }, [dispatch]);
 
   return (
-    <div className=" mx-auto space-y-4">
-      <div className="flex items-center gap-2">
-        <CalendarDays className="w-6 h-6" />
-        <h1 className="text-2xl font-semibold">Manage Holidays</h1>
+    <div className="min-h-screen bg-linear-to-br from-blue-50 via-indigo-50 to-purple-50 p-6 space-y-8">
+
+      {/* Header */}
+      <div className="flex items-center gap-3">
+        <div className="p-3 rounded-2xl bg-linear-to-r from-blue-500 to-indigo-500 text-white shadow-lg">
+          <CalendarDays className="w-6 h-6" />
+        </div>
+        <h1 className="text-3xl font-extrabold bg-linear-to-r from-blue-500 to-indigo-500 bg-clip-text text-transparent">
+          Manage Holidays
+        </h1>
       </div>
 
       {/* Add Holiday Card */}
-      <Card className="rounded-2xl shadow-sm">
+      <Card className="rounded-3xl bg-white/80 backdrop-blur-lg shadow-xl border border-gray-200 hover:shadow-2xl transition-all duration-300">
         <CardHeader>
-          <CardTitle className="text-lg flex items-center gap-2">
+          <CardTitle className="text-xl flex items-center gap-2 text-indigo-700">
             <PlusCircle className="w-5 h-5" />
             Add Holiday
           </CardTitle>
@@ -95,7 +84,7 @@ console.log(holidayList)
         <CardContent>
           <form
             onSubmit={handleSubmit}
-            className="grid grid-cols-1 md:grid-cols-4 gap-4"
+            className="grid grid-cols-1 md:grid-cols-4 gap-5"
           >
             <Input
               placeholder="Holiday Name"
@@ -104,6 +93,7 @@ console.log(holidayList)
                 setFormData({ ...formData, name: e.target.value })
               }
               required
+              className="rounded-xl focus:ring-2 focus:ring-indigo-400 transition"
             />
 
             <Input
@@ -113,6 +103,7 @@ console.log(holidayList)
                 setFormData({ ...formData, date: e.target.value })
               }
               required
+              className="rounded-xl focus:ring-2 focus:ring-indigo-400 transition"
             />
 
             <Select
@@ -121,7 +112,7 @@ console.log(holidayList)
                 setFormData({ ...formData, type: value })
               }
             >
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full rounded-xl focus:ring-2 focus:ring-indigo-400 transition">
                 <SelectValue placeholder="Select Type" />
               </SelectTrigger>
               <SelectContent>
@@ -132,50 +123,57 @@ console.log(holidayList)
               </SelectContent>
             </Select>
 
-            <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-500 cursor-pointer">
-              Add
+            <Button
+              type="submit"
+              className="w-full rounded-xl font-semibold bg-linear-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 shadow-md hover:shadow-lg transition duration-300"
+            >
+              Add Holiday
             </Button>
           </form>
         </CardContent>
       </Card>
 
       {/* Holiday List Card */}
-      <Card className="rounded-2xl shadow-sm">
+      <Card className="rounded-3xl bg-white/80 backdrop-blur-lg shadow-xl border border-gray-200 hover:shadow-2xl transition-all duration-300">
         <CardHeader>
-          <CardTitle className="text-lg">Holiday List</CardTitle>
+          <CardTitle className="text-xl text-indigo-500">
+            Holiday List
+          </CardTitle>
         </CardHeader>
 
         <CardContent>
           {holidayList.length === 0 ? (
-            <p className="text-muted-foreground text-sm">
+            <div className="text-center py-10 text-gray-500">
               No holidays found.
-            </p>
+            </div>
           ) : (
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto rounded-2xl border border-gray-100">
               <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b">
-                    <th className="text-left py-3">Name</th>
-                    <th className="text-left py-3">Date</th>
-                    <th className="text-left py-3">Type</th>
+                <thead className="bg-linear-to-r from-blue-600 to-green-500 text-white">
+                  <tr>
+                    <th className="text-left  py-3 px-4">Name</th>
+                    <th className="text-left py-3 px-4">Date</th>
+                    <th className="text-left py-3 px-4">Type</th>
                   </tr>
                 </thead>
                 <tbody>
                   {holidayList.map((holiday, index) => (
                     <tr
                       key={index}
-                      className="border-b last:border-none hover:bg-muted/40 transition"
+                      className="border-b last:border-none hover:bg-indigo-200 transition duration-300"
                     >
-                      <td className="py-3 font-medium">
+                      <td className="py-3 px-4 font-semibold text-gray-800">
                         {holiday.name}
                       </td>
-                      <td className="py-3">{holiday.date}</td>
-                      <td className="py-3">
+                      <td className="py-3 px-4 text-gray-800">
+                        {holiday.date}
+                      </td>
+                      <td className="py-3 px-4">
                         <Badge
-                          variant={
+                          className={
                             holiday.type === "Public"
-                              ? "default"
-                              : "secondary"
+                              ? "bg-green-100 text-green-700 hover:bg-green-200"
+                              : "bg-purple-100 text-purple-700 hover:bg-purple-200"
                           }
                         >
                           {holiday.type}

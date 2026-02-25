@@ -5,131 +5,165 @@ import { getPendingLeaves, updatedLeaves } from "../../../../redux-store/hr-mana
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 
-
 export default function PendingLeavesTable() {
-const dispatch=useDispatch()
+  const dispatch = useDispatch();
 
-const{pendingLeaves,isLoading}=useSelector((state)=>state.leavesSlice)
-console.log("pendingLeavs",pendingLeaves)
+  const { pendingLeaves, isLoading } = useSelector(
+    (state) => state.leavesSlice
+  );
 
-  useEffect(()=>{
-    dispatch(getPendingLeaves()).unwrap().then((res)=>{
-      console.log("getPendingLeaves",res)
-    }).catch((err)=>{
-      console.log("err",err)
-    })
-  },[dispatch])
+  useEffect(() => {
+    dispatch(getPendingLeaves())
+      .unwrap()
+      .then((res) => {
+        console.log("getPendingLeaves", res);
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+  }, [dispatch]);
 
-  function handleApprove(leave){
-    console.log("leave")
-    console.log(leave._id)
-    const payload={
-      currentPendingLeaveId:leave._id,
-      status:"Approved"
-    }
+  function handleApprove(leave) {
+    const payload = {
+      currentPendingLeaveId: leave._id,
+      status: "Approved",
+    };
 
-    dispatch(updatedLeaves(payload)).unwrap().then((res)=>{
-      console.log("res")
-      console.log(res)
-      if(res.status===200){
-        toast.success(res.data.message)
-      }
-    }).catch((er)=>{
-      console.log("er")
-      console.log(er)
-    })
+    dispatch(updatedLeaves(payload))
+      .unwrap()
+      .then((res) => {
+        if (res.status === 200) {
+          toast.success(res.data.message);
+        }
+      })
+      .catch((er) => {
+        console.log("er", er);
+      });
   }
 
+  function handleReject(leave) {
+    const payload = {
+      currentPendingLeaveId: leave._id,
+      status: "Rejected",
+    };
 
-   function handleReject(leave){
-    console.log("leave")
-    console.log(leave._id)
-    const payload={
-      currentPendingLeaveId:leave._id,
-      status:"Rejected"
-    }
-
-    dispatch(updatedLeaves(payload)).unwrap().then((res)=>{
-      console.log("res")
-      console.log(res)
-      if(res.status===200){
-        toast.success(res.data.message)
-      }
-    }).catch((er)=>{
-      console.log("er")
-      console.log(er)
-    })
+    dispatch(updatedLeaves(payload))
+      .unwrap()
+      .then((res) => {
+        if (res.status === 200) {
+          toast.success(res.data.message);
+        }
+      })
+      .catch((er) => {
+        console.log("er", er);
+      });
   }
 
   return (
-    <div className="min-h-screen  ">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 p-6">
+      
       {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">
+      <div className="mb-8">
+        <h1 className="text-3xl font-extrabold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
           Pending Leave Requests
         </h1>
-        <p className="text-gray-500">
+        <p className="text-gray-600 mt-1">
           Review and manage employee leave applications
         </p>
       </div>
 
       {/* Table Container */}
-      <div className="bg-white rounded-xl shadow-md overflow-hidden">
+      <div className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full text-sm text-left">
             
             {/* Table Head */}
-            <thead className="bg-gray-50 border-b">
+            <thead className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white">
               <tr>
-                <th className="px-2 border py-3 font-semibold whitespace-nowrap text-gray-700">SN</th>
-                <th className="px-2 border py-3 font-semibold whitespace-nowrap text-gray-700">Employee</th>
-                <th className="px-2 border py-3 font-semibold whitespace-nowrap text-gray-700">Leave Type</th>
-                <th className="px-2 border py-3 font-semibold whitespace-nowrap text-gray-700">Start Date</th>
-                <th className="px-2 border py-3 font-semibold whitespace-nowrap text-gray-700">End Date</th>
-                <th className="px-2 border py-3 font-semibold whitespace-nowrap text-gray-700">Days</th>
-                <th className="px-2 border py-3 font-semibold whitespace-nowrap text-gray-700">Reason</th>
-                <th className="px-2 border py-3 font-semibold whitespace-nowrap text-gray-700">Status</th>
-                <th className="px-2 border py-3 font-semibold whitespace-nowrap text-gray-700 text-center">Action</th>
+                <th className="px-4 py-3 whitespace-nowrap">SN</th>
+                <th className="px-4 py-3 whitespace-nowrap">Employee</th>
+                <th className="px-4 py-3 whitespace-nowrap">Leave Type</th>
+                <th className="px-4 py-3 whitespace-nowrap">Start Date</th>
+                <th className="px-4 py-3 whitespace-nowrap">End Date</th>
+                <th className="px-4 py-3 whitespace-nowrap">Days</th>
+                <th className="px-4 py-3 whitespace-nowrap">Reason</th>
+                <th className="px-4 py-3 whitespace-nowrap">Status</th>
+                <th className="px-4 py-3 text-center whitespace-nowrap">
+                  Action
+                </th>
               </tr>
             </thead>
 
             {/* Table Body */}
             <tbody>
-               {pendingLeaves.map((leave,index) => (
+              {pendingLeaves.map((leave, index) => (
                 <tr
                   key={leave.id}
-                  className="border-b hover:bg-gray-50 transition"
+                  className="border-b hover:bg-indigo-50/40 transition duration-300"
                 >
-                     <td className="px-6 py-4 border text-center whitespace-nowrap font-medium text-gray-800">
-                    {index +1}
+                  <td className="px-4 py-3 text-center font-semibold text-gray-700">
+                    {index + 1}
                   </td>
-                  <td className="px-6 py-4 border text-center whitespace-nowrap font-medium text-gray-800">
+
+                  <td className="px-4 py-3 text-center font-medium text-indigo-700">
                     {leave.user.name}
                   </td>
-                  <td className="px-2 border text-center whitespace-nowrap py-4">{leave.leaveType}</td>
-                  <td className="px-2 border text-center whitespace-nowrap py-4">{leave.startDate}</td>
-                  <td className="px-2 border text-center whitespace-nowrap py-4">{leave.endDate}</td>
-                  <td className="px-2 border text-center whitespace-nowrap py-4">{leave.totalDays}</td>
-                  <td className="px-2 border text-center whitespace-nowrap py-4 max-w-xs truncate">
+
+                  <td className="px-4 py-3 text-center">
+                    <span className="px-3 py-1 text-xs font-semibold bg-blue-100 text-blue-700 rounded-full">
+                      {leave.leaveType}
+                    </span>
+                  </td>
+
+                  <td className="px-4 py-3 text-center text-gray-600">
+                    {leave.startDate}
+                  </td>
+
+                  <td className="px-4 py-3 text-center text-gray-600">
+                    {leave.endDate}
+                  </td>
+
+                  <td className="px-4 py-3 text-center">
+                    <span className="px-3 py-1 text-xs font-semibold bg-purple-100 text-purple-700 rounded-full">
+                      {leave.totalDays} Days
+                    </span>
+                  </td>
+
+                  <td className="px-4 py-3 text-center max-w-xs truncate text-gray-600">
                     {leave.reason}
                   </td>
-                  <td className="px-6 py-4 border">
-                    <span className="px-3 py-1 text-xs  text-center font-medium bg-yellow-100 text-yellow-700 rounded-full">
+
+                  <td className="px-4 py-3 text-center">
+                    <span className="px-3 py-1 text-xs font-semibold bg-yellow-100 text-yellow-700 rounded-full">
                       {leave.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4 flex text-center   space-x-2">
-                    <button onClick={()=>handleApprove(leave)} className="px-3 py-1 text-xs bg-green-500 hover:bg-green-600 text-white rounded-md transition">
-                      {isLoading?<span className="h-4 w-4 animate-spin border-t border-t-white border-2 border-gray-700 rounded-full "></span>:"Approve"}
-                      
+
+                  <td className="px-4 py-3 flex justify-center space-x-3">
+                    
+                    {/* Approve Button */}
+                    <button
+                      onClick={() => handleApprove(leave)}
+                      className="px-4 py-1.5 text-xs font-semibold bg-gradient-to-r from-green-400 to-emerald-500 hover:from-green-500 hover:to-emerald-600 text-white rounded-lg shadow-md hover:shadow-lg transition duration-300"
+                    >
+                      {isLoading ? (
+                        <span className="h-4 w-4 inline-block animate-spin border-2 border-white border-t-transparent rounded-full"></span>
+                      ) : (
+                        "Approve"
+                      )}
                     </button>
-                    <button  onClick={()=>handleReject(leave)} className="px-3 py-1 text-xs bg-red-500 hover:bg-red-600 text-white rounded-md transition">
+
+                    {/* Reject Button */}
+                    <button
+                      onClick={() => handleReject(leave)}
+                      className="px-4 py-1.5 text-xs font-semibold bg-gradient-to-r from-red-400 to-pink-500 hover:from-red-500 hover:to-pink-600 text-white rounded-lg shadow-md hover:shadow-lg transition duration-300"
+                    >
                       Reject
                     </button>
+
                   </td>
                 </tr>
-               
-              ))} 
+              ))}
             </tbody>
 
           </table>
