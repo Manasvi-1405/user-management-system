@@ -12,7 +12,6 @@ import { Link, Navigate, Outlet } from "react-router-dom";
 import { useState } from "react";
 import ProfileSection from "../pages/Auth/dashboard/ProfileSection";
 
-
 // ================= MENU CONFIG =================
 const menuItems = [
   {
@@ -45,33 +44,39 @@ const menuItems = [
     path: "/design",
     icon: Codesandbox,
   },
-   {
+  {
     name: "Attendance Management",
-    path: "/attendance-management",
     icon: Codesandbox,
+     adminOnly: true,
+      sublinks: [
+      { name: "Report", path: "/attendance-report" },
+      { name: "Analytcs", path: "/atttendance-anlytics" },
+    ],
   },
-
-  
   {
     name: "HR Page",
     icon: Settings,
+    adminOnly: true, // 🔐 Only Admin Can See
     sublinks: [
       { name: "Pending leaves", path: "/pending-leaves" },
       { name: "Manage Holidays", path: "/manage-holidays" },
       { name: "Generate Salary Slip", path: "/generate-salary-slip" },
       { name: "Payroll Summary", path: "/payroll-summary" },
+      { name: "Salary Management", path: "/salary-management" },
     ],
   },
-
-  
 ];
 // =================================================
-
 
 const UserDashboardLayout = () => {
   const [openMenu, setOpenMenu] = useState(null);
 
-  if (!localStorage.getItem("token")) {
+  const token = localStorage.getItem("token");
+  const role = localStorage.getItem("currentUser");
+const isAdmin = role === "admin";
+
+  // If not logged in
+  if (!token) {
     return <Navigate to="/login" replace />;
   }
 
@@ -96,6 +101,12 @@ const UserDashboardLayout = () => {
           <ul className="flex flex-col gap-1">
 
             {menuItems.map((item, index) => {
+
+              // 🔐 Hide admin-only items for non-admin
+              if (item.adminOnly && !isAdmin) {
+                return null;
+              }
+
               const Icon = item.icon;
 
               // ================== If Item Has Sublinks ==================

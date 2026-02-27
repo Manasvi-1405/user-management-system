@@ -173,7 +173,7 @@ const Attendance = () => {
         console.log(err);
       });
   }, [dispatch]);
-
+//admin
   useEffect(() => {
     dispatch(getMonthlyReportAction()) // ✅ using renamed import
       .unwrap()
@@ -189,7 +189,7 @@ const Attendance = () => {
         console.log(er);
       });
   }, [dispatch]);
-
+//admin
   useEffect(() => {
     dispatch(getEmployeeAnalytics())
       .unwrap()

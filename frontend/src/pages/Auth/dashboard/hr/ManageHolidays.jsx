@@ -42,7 +42,6 @@ const ManageHolidays = () => {
     });
 
     setHolidays((prev) => [...prev, formData]);
-    
 
     setFormData({
       name: "",
@@ -64,10 +63,10 @@ const ManageHolidays = () => {
 
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="p-3 rounded-2xl bg-linear-to-r from-blue-500 to-indigo-500 text-white shadow-lg">
+        <div className="p-3 rounded-2xl bg-linear-to-br from-blue-500 to-indigo-500 text-white shadow-lg">
           <CalendarDays className="w-6 h-6" />
         </div>
-        <h1 className="text-3xl font-extrabold bg-linear-to-r from-blue-500 to-indigo-500 bg-clip-text text-transparent">
+        <h1 className="text-3xl font-extrabold bg-linear-to-br from-blue-500 to-indigo-500 bg-clip-text text-transparent">
           Manage Holidays
         </h1>
       </div>
@@ -125,7 +124,7 @@ const ManageHolidays = () => {
 
             <Button
               type="submit"
-              className="w-full rounded-xl font-semibold bg-linear-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 shadow-md hover:shadow-lg transition duration-300"
+              className="w-full rounded-xl font-semibold bg-linear-to-br from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 shadow-md hover:shadow-lg transition duration-300"
             >
               Add Holiday
             </Button>
@@ -149,7 +148,7 @@ const ManageHolidays = () => {
           ) : (
             <div className="overflow-x-auto rounded-2xl border border-gray-100">
               <table className="w-full text-sm">
-                <thead className="bg-linear-to-r from-blue-600 to-green-500 text-white">
+                <thead className="bg-linear-to-br from-blue-600 to-green-500 text-white">
                   <tr>
                     <th className="text-left  py-3 px-4">Name</th>
                     <th className="text-left py-3 px-4">Date</th>

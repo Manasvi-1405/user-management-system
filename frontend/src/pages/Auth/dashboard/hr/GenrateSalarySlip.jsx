@@ -78,7 +78,7 @@ const GenrateSalarySlip = () => {
   }, [dispatch]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-6 space-y-6 relative overflow-hidden">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 via-indigo-50 to-purple-50 p-6 space-y-6 relative overflow-hidden">
 
       {/* Background Blobs */}
       <div className="absolute -top-40 -left-40 w-96 h-96 bg-purple-300 opacity-20 rounded-full blur-3xl animate-pulse"></div>
@@ -86,10 +86,10 @@ const GenrateSalarySlip = () => {
 
       {/* Header */}
       <div className="relative flex items-center gap-3">
-        <div className="p-3 rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg hover:scale-110 hover:rotate-6 transition duration-500">
+        <div className="p-3 rounded-2xl bg-linear-to-br from-indigo-500 to-purple-600 text-white shadow-lg hover:scale-110 hover:rotate-6 transition duration-500">
           <Users className="w-6 h-6" />
         </div>
-        <h1 className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-indigo-500 via-purple-600 to-pink-500 bg-clip-text text-transparent">
+        <h1 className="text-3xl md:text-4xl font-extrabold bg-linear-to-br from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
           Generate Salary Slip
         </h1>
       </div>
@@ -97,7 +97,7 @@ const GenrateSalarySlip = () => {
       {/* Card */}
       <Card className="rounded-3xl bg-white/70 backdrop-blur-xl shadow-2xl border border-white/40 hover:shadow-indigo-200 transition-all duration-500">
         <CardHeader>
-          <CardTitle className="text-xl font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+          <CardTitle className="text-xl font-semibold bg-linear-to-br from-indigo-600 to-purple-600 bg-clip-text text-transparent">
             Employee List
           </CardTitle>
         </CardHeader>
@@ -105,7 +105,7 @@ const GenrateSalarySlip = () => {
         <CardContent>
           <div className="overflow-x-auto rounded-2xl border border-gray-100 shadow-inner">
             <Table>
-              <TableHeader className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white">
+              <TableHeader className="bg-linear-to-br from-indigo-500 to-purple-600 text-white">
                 <TableRow>
                   <TableHead className="text-white">Name</TableHead>
                   <TableHead className="text-white">Email</TableHead>
@@ -134,7 +134,7 @@ const GenrateSalarySlip = () => {
                           setSelectedUser(user);
                           setOpen(true);
                         }}
-                        className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-indigo-600 hover:to-purple-600 text-white shadow-md hover:shadow-indigo-400/50 hover:scale-105 active:scale-95 transition-all duration-300"
+                        className="flex items-center gap-2 rounded-xl bg-linear-to-br from-blue-600 to-indigo-600 hover:from-indigo-600 hover:to-purple-600 text-white shadow-md hover:shadow-indigo-400/50 hover:scale-105 active:scale-95 transition-all duration-300"
                       >
                         <FileText className="w-4 h-4" />
                         Generate Slip
@@ -152,7 +152,7 @@ const GenrateSalarySlip = () => {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-md rounded-3xl bg-white/80 backdrop-blur-xl shadow-2xl border border-white/40">
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+            <DialogTitle className="text-xl font-bold bg-linear-to-br from-indigo-600 to-purple-600 bg-clip-text text-transparent">
               Generate Salary Slip for {selectedUser?.name}
             </DialogTitle>
           </DialogHeader>
@@ -209,7 +209,7 @@ const GenrateSalarySlip = () => {
             </Button>
 
             <Button
-              className="rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-indigo-600 hover:to-purple-600 text-white shadow-lg hover:shadow-indigo-400/50 hover:scale-105 active:scale-95 transition-all duration-300"
+              className="rounded-xl bg-linear-to-br from-blue-600 to-indigo-600 hover:from-indigo-600 hover:to-purple-600 text-white shadow-lg hover:shadow-indigo-400/50 hover:scale-105 active:scale-95 transition-all duration-300"
               onClick={handleGenerate}
             >
               Generate

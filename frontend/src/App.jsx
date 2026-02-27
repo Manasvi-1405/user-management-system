@@ -17,7 +17,9 @@ import PendingLeavesTable from "./pages/Auth/dashboard/hr/PendingLeaves";
 import ManageHolidays from "./pages/Auth/dashboard/hr/ManageHolidays";
 import GenrateSalarySlip from "./pages/Auth/dashboard/hr/GenrateSalarySlip";
 import PayrollSummary from "./pages/Auth/dashboard/hr/PayrollSummary";
-import AttendanceManagement from "./pages/Auth/dashboard/AttendanceManagement";
+import SalaryManagement from "./pages/Auth/dashboard/hr/SalaryManagement"
+import Report from "./pages/Auth/dashboard/attendance-management/Report";
+import Analytics from "./pages/Auth/dashboard/attendance-management/Analytics";
 
 function App() {
   return (
@@ -37,7 +39,9 @@ function App() {
         <Route path="manage-holidays" element={<ManageHolidays></ManageHolidays>}/>
         <Route path="generate-salary-slip" element={<GenrateSalarySlip></GenrateSalarySlip>}/>
         <Route path="payroll-summary" element={<PayrollSummary></PayrollSummary>}/>
-        <Route path="attendance-management" element={<AttendanceManagement></AttendanceManagement>}/>
+        <Route path="attendance-report" element={<Report></Report>}/>
+        <Route path="salary-management" element={<SalaryManagement></SalaryManagement>}/>
+        <Route path="atttendance-anlytics" element={<Analytics></Analytics>}/>
         {/* <Route path="update-leave" element={<UpdateLeave></UpdateLeave>}/> */}
 
       </Route>

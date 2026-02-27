@@ -31,7 +31,7 @@ const AllLeads = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen bg-gradient-to-br from-indigo-100 via-blue-50 to-purple-100">
+      <div className="flex justify-center items-center h-screen bg-linear-to-r from-indigo-100 via-blue-50 to-purple-100">
         <p className="text-indigo-600 text-xl font-semibold animate-pulse">
           Loading...
         </p>
@@ -42,7 +42,7 @@ const AllLeads = () => {
   if (role !== "admin") {
     if (!Array.isArray(myLeads) || myLeads.length === 0) {
       return (
-        <div className="flex justify-center items-center h-screen bg-gradient-to-br from-indigo-100 via-blue-50 to-purple-100">
+        <div className="flex justify-center items-center h-screen bg-linear-to-r from-indigo-100 via-blue-50 to-purple-100">
           <p className="text-gray-600 text-lg font-medium">
             No Data Found
           </p>
@@ -51,14 +51,14 @@ const AllLeads = () => {
     }
 
     return (
-      <div className="p-8 min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-        <h1 className="text-3xl font-bold mb-8 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+      <div className="p-8 min-h-screen bg-linear-to-r from-indigo-50 via-white to-purple-50">
+        <h1 className="text-3xl font-bold mb-8 bg-linear-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
           Your Leads
         </h1>
 
         <div className="overflow-x-auto bg-white/70 backdrop-blur-lg shadow-2xl rounded-3xl border border-indigo-100">
           <table className="min-w-full text-sm text-left">
-            <thead className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white uppercase text-xs tracking-wider">
+            <thead className="bg-linear-to-r from-indigo-500 to-purple-500 text-white uppercase text-xs tracking-wider">
               <tr>
                 <th className="px-6 py-4">Lead</th>
                 <th className="px-6 py-4">Phone</th>
@@ -120,7 +120,7 @@ const AllLeads = () => {
 
   if (!adminStates?.summary) {
     return (
-      <div className="flex justify-center items-center h-screen bg-gradient-to-br from-indigo-100 via-blue-50 to-purple-100">
+      <div className="flex justify-center items-center h-screen bg-linear-to-br from-indigo-100 via-blue-50 to-purple-100">
         <p className="text-indigo-600 text-lg animate-pulse">
           Loading dashboard...
         </p>
@@ -129,8 +129,8 @@ const AllLeads = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 p-8 space-y-10">
-      <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+    <div className="min-h-screen bg-linear-to-br from-indigo-50 via-white to-purple-50 p-8 space-y-10">
+      <h1 className="text-4xl font-bold bg-linear-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
         Lead Performance Overview
       </h1>
 
@@ -152,7 +152,7 @@ const AllLeads = () => {
           trend.map((item, index) => (
             <div
               key={index}
-              className="flex justify-between items-center p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl mb-3 hover:shadow-md hover:scale-[1.02] transition-all duration-300"
+              className="flex justify-between items-center p-4 bg-linear-to-r from-indigo-50 to-purple-50 rounded-xl mb-3 hover:shadow-md hover:scale-[1.02] transition-all duration-300"
             >
               <p className="text-gray-700 font-medium">
                 {item.formattedDate}
@@ -177,7 +177,7 @@ const DashboardCard = ({ title, value, icon }) => {
           {value}
         </h2>
       </div>
-      <div className="bg-gradient-to-br from-indigo-500 to-purple-500 text-white p-4 rounded-full shadow-lg">
+      <div className="bg-linear-to-br from-indigo-500 to-purple-500 text-white p-4 rounded-full shadow-lg">
         {icon}
       </div>
     </div>

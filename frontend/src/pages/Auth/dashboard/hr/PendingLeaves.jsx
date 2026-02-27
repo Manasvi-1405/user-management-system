@@ -60,11 +60,11 @@ export default function PendingLeavesTable() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 p-6">
+    <div className="min-h-screen bg-linear-to-br from-indigo-50 via-purple-50 to-pink-50 p-6">
       
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-extrabold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+        <h1 className="text-3xl font-extrabold bg-linear-to-br from-indigo-600 to-purple-600 bg-clip-text text-transparent">
           Pending Leave Requests
         </h1>
         <p className="text-gray-600 mt-1">
@@ -78,7 +78,7 @@ export default function PendingLeavesTable() {
           <table className="min-w-full text-sm text-left">
             
             {/* Table Head */}
-            <thead className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white">
+            <thead className="bg-linear-to-br from-indigo-500 to-purple-500 text-white">
               <tr>
                 <th className="px-4 py-3 whitespace-nowrap">SN</th>
                 <th className="px-4 py-3 whitespace-nowrap">Employee</th>
@@ -144,7 +144,7 @@ export default function PendingLeavesTable() {
                     {/* Approve Button */}
                     <button
                       onClick={() => handleApprove(leave)}
-                      className="px-4 py-1.5 text-xs font-semibold bg-gradient-to-r from-green-400 to-emerald-500 hover:from-green-500 hover:to-emerald-600 text-white rounded-lg shadow-md hover:shadow-lg transition duration-300"
+                      className="px-4 py-1.5 text-xs font-semibold bg-linear-to-br from-green-400 to-emerald-500 hover:from-green-500 hover:to-emerald-600 text-white rounded-lg shadow-md hover:shadow-lg transition duration-300"
                     >
                       {isLoading ? (
                         <span className="h-4 w-4 inline-block animate-spin border-2 border-white border-t-transparent rounded-full"></span>
@@ -156,7 +156,7 @@ export default function PendingLeavesTable() {
                     {/* Reject Button */}
                     <button
                       onClick={() => handleReject(leave)}
-                      className="px-4 py-1.5 text-xs font-semibold bg-gradient-to-r from-red-400 to-pink-500 hover:from-red-500 hover:to-pink-600 text-white rounded-lg shadow-md hover:shadow-lg transition duration-300"
+                      className="px-4 py-1.5 text-xs font-semibold bg-linear-to-br from-red-400 to-pink-500 hover:from-red-500 hover:to-pink-600 text-white rounded-lg shadow-md hover:shadow-lg transition duration-300"
                     >
                       Reject
                     </button>
