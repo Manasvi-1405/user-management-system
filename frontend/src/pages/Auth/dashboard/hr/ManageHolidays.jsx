@@ -14,12 +14,17 @@ import { CalendarDays, PlusCircle } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { addHolidays, getHolidays } from "../../../../redux-store/hr-management/leavesSlice";
 import { toast } from "sonner";
+import { getHolidayPolicy, initializeHolidayPolicy } from "../../../../redux-store/hr-management/salaryManagemenetSlice";
 
 const ManageHolidays = () => {
 
   const dispatch = useDispatch();
 
   const { holidayList } = useSelector((state) => state.leavesSlice);
+
+
+  console.log("holidayLidddddddddddddddddddddddddddddst")
+  console.log(holidayList)
 
   const [formData, setFormData] = useState({
     name: "",
@@ -57,6 +62,28 @@ const ManageHolidays = () => {
       console.log("err", err);
     });
   }, [dispatch]);
+
+
+    //  dispatch(initializeHolidayPolicy()).unwrap().then((res)=>{
+    //     console.log("init holiday res")
+    //     console.log(res)
+       
+    //   }).catch((er)=>{
+    //     console.log("er")
+    //     console.log(er)
+    // },[dispatch])
+
+    // useEffect(()=>{
+    //      dispatch(getHolidayPolicy()).unwrap().then((res)=>{
+    //     console.log("getHolidayPolicy")
+    //     console.log(res)
+    //   }).catch((er)=>{
+    //     console.log("er")
+    //     console.log(er)
+    //   })
+
+    // })
+   
 
   return (
     <div className="min-h-screen bg-linear-to-br from-blue-50 via-indigo-50 to-purple-50 p-6 space-y-8">
@@ -141,7 +168,7 @@ const ManageHolidays = () => {
         </CardHeader>
 
         <CardContent>
-          {holidayList.length === 0 ? (
+          {holidayList?.holidays?.length === 0 ? (
             <div className="text-center py-10 text-gray-500">
               No holidays found.
             </div>
@@ -156,26 +183,26 @@ const ManageHolidays = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {holidayList.map((holiday, index) => (
+                  {holidayList?.data?.holidays?.map((holiday, index) => (
                     <tr
                       key={index}
                       className="border-b last:border-none hover:bg-indigo-200 transition duration-300"
                     >
                       <td className="py-3 px-4 font-semibold text-gray-800">
-                        {holiday.name}
+                        {holiday?.name}
                       </td>
                       <td className="py-3 px-4 text-gray-800">
-                        {holiday.date}
+                        {holiday?.date}
                       </td>
                       <td className="py-3 px-4">
                         <Badge
                           className={
-                            holiday.type === "Public"
+                            holiday?.type === "Public"
                               ? "bg-green-100 text-green-700 hover:bg-green-200"
                               : "bg-purple-100 text-purple-700 hover:bg-purple-200"
                           }
                         >
-                          {holiday.type}
+                          {holiday?.type}
                         </Badge>
                       </td>
                     </tr>

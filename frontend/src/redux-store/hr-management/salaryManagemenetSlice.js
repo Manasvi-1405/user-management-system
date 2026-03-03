@@ -250,11 +250,11 @@ export const getMySalarySlip = createAsyncThunk(
 
 export const setSalary = createAsyncThunk(
   " /setSalary",
-  async (payload, { rejectWithValue }) => {
+  async ({payload,id}, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/salary/set/:userId`,payload,
+        `${import.meta.env.VITE_BASE_URL}/salary/set/${id}`,payload,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -304,11 +304,95 @@ export const initializeLeavePolicies = createAsyncThunk(
 
 export const initializeHolidayPolicy = createAsyncThunk(
   " /initializeHolidayPolicy",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/salary/holiday-policy/init`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return {
+        status: response.status,
+        data: response.data,
+      };
+    } catch (error) {
+      return rejectWithValue({
+        status: error.status,
+        data: error.response.data,
+        // err:error
+      });
+    }
+  }
+);
+
+
+export const uploadDocuments = createAsyncThunk(
+  "uploadDocuments",
   async (payload, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/salary/holiday-policy/init`,payload,
+        `${import.meta.env.VITE_BASE_URL}/hr/documents/upload`,payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return {
+        status: response.status,
+        data: response.data,
+      };
+    } catch (error) {
+      return rejectWithValue({
+        status: error.status,
+        data: error.response.data,
+        // err:error
+      });
+    }
+  }
+);
+
+// get single user document
+export const getDocument = createAsyncThunk(
+  "getDocument",
+  async (id, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/hr/documents/user/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return {
+        status: response.status,
+        data: response.data,
+      };
+    } catch (error) {
+      return rejectWithValue({
+        status: error.status,
+        data: error.response.data,
+        // err:error
+      });
+    }
+  }
+);
+
+export const verifyDocument = createAsyncThunk(
+  "verifyDocument",
+  async ({documentId,status}, { rejectWithValue }) => {
+    console.log("asynfkld" ,documentId)
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.patch(
+        `${import.meta.env.VITE_BASE_URL}/hr/documents/verify/${documentId}`,{status:status},
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -335,6 +419,9 @@ export const initializeHolidayPolicy = createAsyncThunk(
 const initialState = {
   isLoading: false,
   iscreateUserLoading: false,
+  singleUserDoc:{},
+  mySalary:{},
+  holidayPolicy:{}
 
 };
 
@@ -461,6 +548,37 @@ const salaryManagementSlice = createSlice({
         state.iscreateUserLoading = false;
       })
       .addCase( initializeHolidayPolicy .rejected, (state) => {
+        state.iscreateUserLoading = false;
+      })
+          .addCase( uploadDocuments.pending, (state) => {
+        state.iscreateUserLoading = true;
+      })
+      .addCase( uploadDocuments.fulfilled, (state) => {
+        state.iscreateUserLoading = false;
+      })
+      .addCase( uploadDocuments.rejected, (state) => {
+        state.iscreateUserLoading = false;
+      })
+
+
+                .addCase( getDocument.pending, (state) => {
+        state.iscreateUserLoading = true;
+      })
+      .addCase( getDocument.fulfilled, (state,action) => {
+        state.iscreateUserLoading = false;
+        state.singleUserDoc=action.payload.data.data
+      })
+      .addCase( getDocument.rejected, (state) => {
+        state.iscreateUserLoading = false;
+      })
+                 .addCase( verifyDocument.pending, (state) => {
+        state.iscreateUserLoading = true;
+      })
+      .addCase( verifyDocument.fulfilled, (state) => {
+        state.iscreateUserLoading = false;
+        // state.singleUserDoc=action.payload.data.data
+      })
+      .addCase( verifyDocument.rejected, (state) => {
         state.iscreateUserLoading = false;
       })
 

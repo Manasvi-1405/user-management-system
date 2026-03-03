@@ -12,16 +12,10 @@ export default function PendingLeavesTable() {
     (state) => state.leavesSlice
   );
 
-  useEffect(() => {
-    dispatch(getPendingLeaves())
-      .unwrap()
-      .then((res) => {
-        console.log("getPendingLeaves", res);
-      })
-      .catch((err) => {
-        console.log("err", err);
-      });
-  }, [dispatch]);
+  console.log("pendingLeavesmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm")
+  console.log(pendingLeaves)
+
+
 
   function handleApprove(leave) {
     const payload = {
@@ -58,7 +52,16 @@ export default function PendingLeavesTable() {
         console.log("er", er);
       });
   }
-
+  useEffect(() => {
+    dispatch(getPendingLeaves())
+      .unwrap()
+      .then((res) => {
+        console.log("getPendingLeaves", res);
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+  }, [dispatch]);
   return (
     <div className="min-h-screen bg-linear-to-br from-indigo-50 via-purple-50 to-pink-50 p-6">
       
@@ -96,7 +99,7 @@ export default function PendingLeavesTable() {
 
             {/* Table Body */}
             <tbody>
-              {pendingLeaves.map((leave, index) => (
+              {pendingLeaves?.data?.leaves?.map((leave, index) => (
                 <tr
                   key={leave.id}
                   className="border-b hover:bg-indigo-50/40 transition duration-300"

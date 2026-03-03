@@ -17,45 +17,77 @@ import PendingLeavesTable from "./pages/Auth/dashboard/hr/PendingLeaves";
 import ManageHolidays from "./pages/Auth/dashboard/hr/ManageHolidays";
 import GenrateSalarySlip from "./pages/Auth/dashboard/hr/GenrateSalarySlip";
 import PayrollSummary from "./pages/Auth/dashboard/hr/PayrollSummary";
-import SalaryManagement from "./pages/Auth/dashboard/hr/SalaryManagement"
 import Report from "./pages/Auth/dashboard/attendance-management/Report";
 import Analytics from "./pages/Auth/dashboard/attendance-management/Analytics";
+import SetSalary from "./pages/Auth/dashboard/salary-management/SetSalary";
+import SalaryList from "./pages/Auth/dashboard/salary-management/SalaryList";
+import MySalary from "./pages/Auth/dashboard/salary-management/MySalary";
+import UploadDocument from "./pages/Auth/dashboard/UploadDocument ";
+import DocumentList from "./pages/Auth/dashboard/hr/DocumentList";
+import SingleUserDocuemt from "./pages/Auth/dashboard/hr/SingleUserDocuemt";
 
 function App() {
   return (
     <div>
       <Toaster></Toaster>
-         <Routes>
-      
-      <Route path="/" element={<UserDashboardLayout />}>
-        <Route index element={<Home />} />
-        <Route path="all-leads" element={<AllLeads />} />
-        <Route path="attendance" element={<Attendance />} />
-        <Route path="performance" element={<Performance />} />
-        <Route path="members" element={<Members />} />
-        <Route path="design" element={<Design />} />
-        <Route path="Settings" element={<Settings></Settings>} />
-        <Route path="pending-leaves" element={<PendingLeavesTable></PendingLeavesTable>}/>
-        <Route path="manage-holidays" element={<ManageHolidays></ManageHolidays>}/>
-        <Route path="generate-salary-slip" element={<GenrateSalarySlip></GenrateSalarySlip>}/>
-        <Route path="payroll-summary" element={<PayrollSummary></PayrollSummary>}/>
-        <Route path="attendance-report" element={<Report></Report>}/>
-        <Route path="salary-management" element={<SalaryManagement></SalaryManagement>}/>
-        <Route path="atttendance-anlytics" element={<Analytics></Analytics>}/>
-        {/* <Route path="update-leave" element={<UpdateLeave></UpdateLeave>}/> */}
+      <Routes>
+        <Route path="/" element={<UserDashboardLayout />}>
+          <Route index element={<Home />} />
+          <Route path="all-leads" element={<AllLeads />} />
+          <Route path="attendance" element={<Attendance />} />
+          <Route path="performance" element={<Performance />} />
+          <Route path="members" element={<Members />} />
+          <Route path="design" element={<Design />} />
+          <Route path="Settings" element={<Settings></Settings>} />
+          <Route
+            path="pending-leaves"
+            element={<PendingLeavesTable></PendingLeavesTable>}
+          />
+          <Route
+            path="manage-holidays"
+            element={<ManageHolidays></ManageHolidays>}
+          />
+          <Route
+            path="generate-salary-slip"
+            element={<GenrateSalarySlip></GenrateSalarySlip>}
+          />
+          <Route
+            path="payroll-summary"
+            element={<PayrollSummary></PayrollSummary>}
+          />
+          <Route path="attendance-report" element={<Report></Report>} />
+          <Route
+            path="atttendance-anlytics"
+            element={<Analytics></Analytics>}
+          />
+          <Route path="set-salary" element={<SetSalary></SetSalary>} />
+          <Route path="salary-list" element={<SalaryList></SalaryList>} />
+          <Route path="my-salary" element={<MySalary></MySalary>} />
+          <Route
+            path="upload-documents"
+            element={<UploadDocument></UploadDocument>}
+          />
+          <Route path="document-list" element={<DocumentList></DocumentList>} />
+          <Route
+            path="document/:userId"
+            element={<SingleUserDocuemt></SingleUserDocuemt>}
+          />
+          {/* <Route path="update-leave" element={<UpdateLeave></UpdateLeave>}/> */}
+        </Route>
 
-      </Route>
-
-      <Route path="/register" element={<Register></Register>}></Route>
-      <Route path="/login" element={<Login></Login>}></Route>
-      <Route path="/forgotpassword" element={<ForgotPassword></ForgotPassword>}></Route>
-      <Route path="/reset-password" element={<ResetPassword></ResetPassword>}></Route>
-      <Route path="/signout" element={<ProfileSection />} />
-      
-
-    </Routes>
+        <Route path="/register" element={<Register></Register>}></Route>
+        <Route path="/login" element={<Login></Login>}></Route>
+        <Route
+          path="/forgotpassword"
+          element={<ForgotPassword></ForgotPassword>}
+        ></Route>
+        <Route
+          path="/reset-password"
+          element={<ResetPassword></ResetPassword>}
+        ></Route>
+        <Route path="/signout" element={<ProfileSection />} />
+      </Routes>
     </div>
- 
   );
 }
 

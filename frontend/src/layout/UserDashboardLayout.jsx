@@ -44,6 +44,12 @@ const menuItems = [
     path: "/design",
     icon: Codesandbox,
   },
+
+    {
+    name: "Upload Documents",
+    path: "/upload-documents",
+    icon: Codesandbox,
+  },
   {
     name: "Attendance Management",
     icon: Codesandbox,
@@ -56,13 +62,24 @@ const menuItems = [
   {
     name: "HR Page",
     icon: Settings,
-    adminOnly: true, // 🔐 Only Admin Can See
+    adminOnly: true,
     sublinks: [
       { name: "Pending leaves", path: "/pending-leaves" },
       { name: "Manage Holidays", path: "/manage-holidays" },
       { name: "Generate Salary Slip", path: "/generate-salary-slip" },
       { name: "Payroll Summary", path: "/payroll-summary" },
-      { name: "Salary Management", path: "/salary-management" },
+      { name: "Document list", path: "/document-list" },
+    ],
+  },
+   {
+    name: "Salary management",
+    icon: Settings,
+    adminOnly: true, // 🔐 Only Admin Can See
+    sublinks: [
+      { name: "Set Salary", path: "/set-salary" },
+      { name: "Salary List", path: "/salary-list" },
+      { name: "My Salary", path: "/my-salary" },
+   
     ],
   },
 ];
